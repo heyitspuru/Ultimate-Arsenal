@@ -57,13 +57,35 @@ def parse_page(path: pathlib.Path) -> dict:
     return meta
 
 
+def _comment_index(line: str) -> int:
+    """Index of a `//` line comment, or -1 — ignoring `//` inside string/char
+    literals (e.g. a URL in a Java string)."""
+    in_str = None
+    i = 0
+    while i < len(line) - 1:
+        c = line[i]
+        if in_str:
+            if c == "\\":
+                i += 2
+                continue
+            if c == in_str:
+                in_str = None
+        elif c in ('"', "'"):
+            in_str = c
+        elif c == "/" and line[i + 1] == "/":
+            return i
+        i += 1
+    return -1
+
+
 def cloze_java(java: str, max_blanks: int = 3) -> str:
     """Blank up to `max_blanks` comment-annotated lines: the code keeps its
     comment as a hint, the code itself becomes a cloze deletion."""
     out, n = [], 0
     for line in java.split("\n"):
-        if n < max_blanks and "//" in line:
-            code, _, comment = line.partition("//")
+        idx = _comment_index(line) if n < max_blanks else -1
+        if idx != -1:
+            code, comment = line[:idx], line[idx + 2:]
             if code.strip():
                 indent = code[: len(code) - len(code.lstrip())]
                 n += 1
@@ -71,11 +93,12 @@ def cloze_java(java: str, max_blanks: int = 3) -> str:
                 out.append(line)
                 continue
         out.append(html.escape(line))
-    # If nothing had a comment, cloze the first substantive line as a fallback.
+    # If nothing had a comment, cloze a substantive line as a fallback.
     if n == 0:
         lines = [l for l in java.split("\n") if l.strip()]
-        if len(lines) > 1:
-            target = html.escape(lines[1].strip())
+        if lines:
+            target_line = lines[1] if len(lines) > 1 else lines[0]
+            target = html.escape(target_line.strip())
             body = html.escape(java).replace(target, f"{{{{c1::{target}}}}}", 1)
             return f'<pre style="{CODE_STYLE}">{body}</pre>'
     return f'<pre style="{CODE_STYLE}">' + "\n".join(out) + "</pre>"
@@ -129,8 +152,15 @@ def main() -> None:
         mnem = p.get("mnemonic", "")
         tag = re.sub(r"[^A-Za-z0-9]+", "_", name).strip("_")
 
+        signals = p.get("signals", [])
+        if not isinstance(signals, list):
+            raise ValueError(f"{path.name}: 'signals' must be a list, got {type(signals).__name__}")
+        problems = p.get("problems", [])
+        if not isinstance(problems, list):
+            raise ValueError(f"{path.name}: 'problems' must be a list, got {type(problems).__name__}")
+
         # 1) Keyword -> Pattern (one card per signal phrase)
-        for sig in p.get("signals", []):
+        for sig in signals:
             front = f"Signal: <b>{html.escape(str(sig))}</b><br>Which pattern?"
             back = f"<b>{html.escape(name)}</b><br>Mnemonic: {html.escape(mnem)}"
             deck.add_note(genanki.Note(basic_model, [front, back, tag]))
@@ -146,7 +176,7 @@ def main() -> None:
             n_cloze += 1
 
         # 3) Problem-as-scheduler (one card per canonical problem)
-        for prob in p.get("problems", []):
+        for prob in problems:
             pname, diff, url = prob["name"], prob.get("diff", ""), prob.get("url", "")
             front = (f'<a href="{html.escape(url)}">{html.escape(pname)}</a> '
                      f'[{diff}]<br>Re-solve it, then self-grade.')

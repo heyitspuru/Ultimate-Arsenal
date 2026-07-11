@@ -2,7 +2,7 @@
 """
 DSA Pattern Vault - offline PDF builder.
 
-Assembles the masters + all 24 pattern pages into ONE print-optimized PDF for
+Assembles the masters + all pattern pages into ONE print-optimized PDF for
 last-minute revision. Runs fully offline via WeasyPrint (no browser needed).
 
 Design choices for print:
@@ -18,6 +18,7 @@ Usage:  python site/build_pdf.py   ->   dsa-pattern-vault.pdf  (repo root)
 import html
 import pathlib
 import re
+import textwrap
 import markdown
 import weasyprint
 
@@ -52,12 +53,12 @@ def flatten_tabs_and_mermaid(md: str) -> str:
         if m:
             out.append(f"\n**{m.group(1)}**")
             i += 1
-            # consume the indented block that follows (4-space indented)
+            # consume the indented block that follows (any consistent indent)
             block = []
-            while i < len(lines) and (lines[i].startswith("    ") or lines[i].strip() == ""):
-                block.append(lines[i][4:] if lines[i].startswith("    ") else lines[i])
+            while i < len(lines) and (lines[i].strip() == "" or lines[i][:1].isspace()):
+                block.append(lines[i])
                 i += 1
-            out.append("\n".join(block))
+            out.append(textwrap.dedent("\n".join(block)))
             continue
         out.append(line)
         i += 1
@@ -114,10 +115,11 @@ blockquote { border-left: 3px solid #2ea043; margin: 4px 0; padding: 2px 10px;
 .wbox.avoid strong:first-child { color: #b3261e; }
 """
 
-COVER = """
+def _cover(pattern_count: int) -> str:
+    return f"""
 <div class="cover">
   <h1>DSA Pattern <span class="accent">Vault</span></h1>
-  <p>Pattern-first recall &amp; revision &middot; 24 patterns &middot; Java-primary</p>
+  <p>Pattern-first recall &amp; revision &middot; {pattern_count} patterns &middot; Java-primary</p>
   <p style="color:#2ea043">keyword &rarr; pattern &rarr; template</p>
 </div>
 """
@@ -126,7 +128,8 @@ MD_EXT = ["fenced_code", "tables", "attr_list", "sane_lists", "admonition", "md_
 
 
 def main() -> None:
-    parts = [COVER]
+    pattern_count = len(ORDER[1][1])
+    parts = [_cover(pattern_count)]
     for _section, rels in ORDER:
         for rel in rels:
             raw = (CONTENT / rel).read_text(encoding="utf-8")
