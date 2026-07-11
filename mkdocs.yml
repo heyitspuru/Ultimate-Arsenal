@@ -1,0 +1,116 @@
+site_name: DSA Pattern Vault
+site_description: Pattern-first DSA recall & revision. Keyword to pattern to template.
+site_author: raj
+
+docs_dir: content
+site_dir: _build
+
+theme:
+  name: material
+  custom_dir: site/overrides
+  palette:
+    - scheme: slate            # dark-only; glossy grey-black + red set in extra.css
+      primary: black
+      accent: red
+  font:
+    text: IBM Plex Sans
+    code: JetBrains Mono
+  features:
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+
+extra_css:
+  - stylesheets/extra.css
+  - stylesheets/print.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
+  - js/mermaid-init.js
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.keys
+  - pymdownx.details
+
+plugins:
+  - search
+  - print-site:
+      add_to_navigation: true
+      print_page_title: "DSA Pattern Vault - Print / PDF"
+      add_print_site_banner: false
+      add_table_of_contents: true
+      toc_title: Contents
+      toc_depth: 2
+      add_cover_page: true
+      enumerate_headings: false
+      enumerate_figures: false
+
+nav:
+  - Home: index.md
+  - Masters:
+      - Keyword to Pattern: masters/keyword-lookup.md
+      - Decision Flowchart: masters/decision-flowchart.md
+      - Complexity Cheatsheet: masters/complexity-cheatsheet.md
+      - Pattern Reference (94-sheet): masters/pattern-map.md
+  - Patterns:
+      - "Sprint 1 - Foundational":
+          - Two Pointers: patterns/01-two-pointers.md
+          - Sliding Window: patterns/02-sliding-window.md
+          - Fast and Slow Pointers: patterns/03-fast-slow-pointers.md
+          - Prefix Sum: patterns/04-prefix-sum.md
+          - Hashing: patterns/05-hashing.md
+          - Binary Search: patterns/06-binary-search.md
+          - Monotonic Stack: patterns/07-monotonic-stack.md
+      - "Sprint 2 - Intermediate":
+          - LinkedList Reversal: patterns/08-linkedlist-reversal.md
+          - Merge Intervals: patterns/09-merge-intervals.md
+          - Cyclic Sort: patterns/10-cyclic-sort.md
+          - Tree BFS: patterns/11-tree-bfs.md
+          - Tree DFS: patterns/12-tree-dfs.md
+          - Heap / Top-K: patterns/13-heap-top-k.md
+          - Two Heaps: patterns/14-two-heaps.md
+          - K-way Merge: patterns/15-k-way-merge.md
+          - Backtracking: patterns/16-backtracking.md
+      - "Sprint 3 - Advanced":
+          - Graph BFS: patterns/17-graph-bfs.md
+          - Graph DFS: patterns/18-graph-dfs.md
+          - Topological Sort: patterns/19-topological-sort.md
+          - Union-Find: patterns/20-union-find.md
+          - Trie: patterns/21-trie.md
+          - Greedy: patterns/22-greedy.md
+          - Bit Manipulation: patterns/23-bit-manipulation.md
+          - Dynamic Programming: patterns/24-dynamic-programming.md
+      - "Sprint 4 - Expert":
+          - Dijkstra: patterns/25-dijkstra.md
+          - Bellman-Ford: patterns/26-bellman-ford.md
+          - Minimum Spanning Tree: patterns/27-minimum-spanning-tree.md
+          - Tarjan (SCC & Bridges): patterns/28-tarjan-scc.md
+          - String Matching: patterns/29-string-matching.md
+          - Interval DP: patterns/30-interval-dp.md
+          - LRU / LFU Design: patterns/31-lru-lfu-design.md

@@ -1,0 +1,270 @@
+/* ==========================================================================
+   DSA Pattern Vault - glossy grey-black theme with red highlights.
+   Dark only. Charcoal gradient backdrop, glass header, glossy panels.
+   ========================================================================== */
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #0e0e11;
+  --md-default-fg-color: #e8e8ec;
+  --md-default-fg-color--light: #b7b8bf;
+  --md-default-fg-color--lighter: #83858f;
+  --md-default-fg-color--lightest: #2c2c33;
+  --md-primary-fg-color: #0a0a0c;
+  --md-primary-bg-color: #f2f2f5;
+  --md-accent-fg-color: #ff4d4d;
+  --md-typeset-a-color: #ff5c5c;
+  --md-code-bg-color: #131319;
+  --md-code-fg-color: #e8e8ec;
+  --md-footer-bg-color: #0a0a0c;
+  --md-footer-bg-color--dark: #08080a;
+}
+
+/* ---- Glossy fixed backdrop (charcoal + faint red glow) ---- */
+html {
+  background:
+    radial-gradient(1200px 620px at 86% -12%, rgba(255,64,64,0.12), transparent 60%),
+    radial-gradient(1000px 720px at 8% 112%, rgba(255,64,64,0.06), transparent 55%),
+    linear-gradient(158deg, #1a1a20 0%, #101014 46%, #0a0a0c 100%);
+  background-attachment: fixed;
+  background-color: #0b0b0d;
+}
+.md-main, .md-container, .md-content { background: transparent !important; }
+/* keep drawers / search dropdowns opaque for legibility */
+.md-search__output, .md-search-result, .md-nav--primary { background: #131319; }
+
+/* ---- Glass header ---- */
+.md-header {
+  background: rgba(12,12,15,0.72);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border-bottom: 1px solid rgba(255,77,77,0.55);
+  box-shadow: 0 2px 22px rgba(0,0,0,0.55);
+}
+.md-tabs { background: transparent; }
+.md-tabs__link--active, .md-tabs__link:hover { color: #ff6b6b; opacity: 1; }
+
+/* ---- Typography ---- */
+.md-typeset { font-size: 0.82rem; line-height: 1.65; }
+.md-typeset h1 {
+  font-weight: 600; font-size: 1.5rem; letter-spacing: -0.01em;
+  margin: 0 0 0.6rem; padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+.md-typeset h2 {
+  font-weight: 600; font-size: 1.05rem; margin: 1.6rem 0 0.5rem;
+  padding-left: 0.55rem; border-left: 3px solid var(--md-accent-fg-color);
+}
+.md-typeset h3 { font-weight: 600; font-size: 0.92rem; margin: 1rem 0 0.3rem; }
+.md-typeset a { color: var(--md-typeset-a-color); }
+.md-typeset a:hover { color: #ff8080; }
+
+/* ---- Signal-keyword chips (glossy red-tinted) ---- */
+.chip {
+  display: inline-block; padding: 0.14em 0.62em; margin: 0.15em 0.3em 0.15em 0;
+  border-radius: 999px; font-size: 0.72rem; font-weight: 500;
+  color: #ff9a9a; border: 1px solid rgba(255,77,77,0.42);
+  background: linear-gradient(180deg, rgba(255,77,77,0.10), rgba(255,77,77,0.03));
+}
+
+/* ---- Difficulty tags (readable on dark) ---- */
+.diff-e { color: #4bd486; font-weight: 700; }
+.diff-m { color: #ffb454; font-weight: 700; }
+.diff-h { color: #ff5c5c; font-weight: 700; }
+
+/* ---- Glossy code panels ---- */
+.md-typeset pre > code, .md-typeset .highlight > pre {
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 9px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 22px rgba(0,0,0,0.38);
+}
+.md-typeset .tabbed-labels > label { font-weight: 600; }
+.md-typeset .tabbed-set > input:checked + label { color: #ff6b6b; }
+
+/* ---- Admonition (Mnemonic): glossy card, red edge ---- */
+.md-typeset .admonition, .md-typeset details {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 3px solid var(--md-accent-fg-color);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012));
+  box-shadow: 0 10px 26px rgba(0,0,0,0.32);
+}
+.md-typeset .admonition-title, .md-typeset summary {
+  background: transparent !important; color: #ff8080; font-weight: 600;
+}
+
+/* ---- Tables (glossy) ---- */
+.md-typeset table:not([class]) {
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;
+  background: rgba(255,255,255,0.02); font-size: 0.78rem;
+}
+.md-typeset table:not([class]) th {
+  background: rgba(255,77,77,0.12); color: #ffb0b0; font-weight: 600;
+}
+.md-typeset table:not([class]) tr:hover { background: rgba(255,255,255,0.03); }
+
+/* ---- Nav accents ---- */
+.md-nav__link--active, .md-nav__link:focus, .md-nav__link:hover { color: #ff6b6b !important; }
+
+/* ---- Mermaid: glossy framed panel ---- */
+.md-typeset .mermaid {
+  display: flex; justify-content: center; margin: 1rem 0; padding: 0.9rem;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 10px 26px rgba(0,0,0,0.3);
+}
+.md-typeset .mermaid svg { max-height: 360px; height: auto; }
+.md-typeset pre.mermaid { background: transparent; border: none; color: var(--md-default-fg-color--light); }
+
+/* ---- Custom scrollbar ---- */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: #0d0d10; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3a3a42, #222228); border-radius: 6px;
+  border: 2px solid #0d0d10;
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #ff5c5c, #b83030); }
+::selection { background: rgba(255,77,77,0.32); }
+
+/* ---- Search input glass ---- */
+.md-search__input { background: rgba(255,255,255,0.06); }
+.md-search__input:hover { background: rgba(255,255,255,0.09); }
+
+/* ==========================================================================
+   Home page: hero + pattern card grid (custom, non-generic landing)
+   ========================================================================== */
+
+.md-typeset .vault-hero {
+  position: relative; overflow: hidden; text-align: center;
+  margin: 0 0 2rem; padding: 3rem 1.2rem 2rem; border-radius: 20px;
+  background: linear-gradient(158deg, rgba(255,77,77,0.12), rgba(255,255,255,0.02) 42%, transparent 75%);
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 60px rgba(0,0,0,0.45);
+}
+.md-typeset .vault-hero::before {
+  content: ""; position: absolute; top: -60%; left: -10%; width: 60%; height: 220px;
+  background: radial-gradient(closest-side, rgba(255,77,77,0.35), transparent);
+  filter: blur(40px); pointer-events: none;
+}
+.md-typeset .vault-hero h1 {
+  border: none; margin: 0 0 0.3rem; font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #ffffff 30%, #ff8a8a);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.md-typeset .vault-hero > p {
+  color: var(--md-default-fg-color--light); font-size: 0.98rem; margin: 0.2rem 0 0;
+}
+.md-typeset .hero-actions p { margin: 1.4rem 0 0.6rem; display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
+.md-typeset a.hero-btn {
+  display: inline-block; padding: 0.55rem 1.15rem; border-radius: 11px;
+  font-weight: 600; font-size: 0.8rem; text-decoration: none;
+  color: var(--md-default-fg-color); border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05); transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.md-typeset a.hero-btn:hover { transform: translateY(-2px); border-color: rgba(255,77,77,0.65); }
+.md-typeset a.hero-btn--primary {
+  color: #fff; border-color: #ff5c5c;
+  background: linear-gradient(180deg, #ff5c5c, #c62f2f);
+  box-shadow: 0 10px 24px rgba(255,60,60,0.38);
+}
+.md-typeset .hero-stats {
+  display: flex; gap: 1.6rem; justify-content: center; flex-wrap: wrap;
+  margin-top: 0.8rem; font-size: 0.78rem; color: var(--md-default-fg-color--light);
+}
+.md-typeset .hero-stats b { color: #ff8080; font-size: 1.15rem; margin-right: 0.25rem; }
+
+/* ---- Card grid (markdown list -> cards) ---- */
+.md-typeset .pattern-grid > ul {
+  list-style: none; margin: 0.4rem 0 1.6rem; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.85rem;
+}
+.md-typeset .pattern-grid > ul > li { margin: 0; }
+.md-typeset .pattern-grid > ul > li::before { display: none; }   /* kill list marker */
+.md-typeset .pattern-grid a {
+  display: flex; flex-direction: column; gap: 0.28rem; height: 100%;
+  padding: 0.9rem 1rem; border-radius: 14px; text-decoration: none;
+  color: var(--md-default-fg-color);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.md-typeset .pattern-grid a:hover {
+  transform: translateY(-4px); border-color: rgba(255,77,77,0.6);
+  background: linear-gradient(180deg, rgba(255,77,77,0.10), rgba(255,255,255,0.015));
+  box-shadow: 0 18px 36px rgba(0,0,0,0.45);
+}
+.md-typeset .pattern-grid a .pc-n {
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; color: #ff6b6b; text-transform: uppercase;
+}
+.md-typeset .pattern-grid a .pc-t { font-weight: 600; font-size: 0.95rem; line-height: 1.2; }
+.md-typeset .pattern-grid a .pc-m { font-size: 0.72rem; color: var(--md-default-fg-color--light); line-height: 1.4; }
+
+/* Sprint section headings on the home page */
+.md-typeset .vault-hero + h2, .md-typeset .pattern-grid + h2 { margin-top: 1.8rem; }
+
+/* Hide the toc permalink pilcrow on the hero title */
+.md-typeset .vault-hero .headerlink { display: none !important; }
+
+/* Make the collapsible nav toggles a touch clearer */
+.md-nav__item .md-nav__link .md-nav__icon { color: var(--md-default-fg-color--light); }
+.md-nav__item--active > .md-nav__link { color: #ff6b6b; }
+
+/* ==========================================================================
+   When to use / NOT use — paired boxes (green Use · red Avoid)
+   ========================================================================== */
+.md-typeset .usenot {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.6rem 0 0.4rem;
+}
+@media (max-width: 44rem) { .md-typeset .usenot { grid-template-columns: 1fr; } }
+
+.md-typeset .wbox {
+  border-radius: 12px; padding: 0.75rem 0.95rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+.md-typeset .wbox p { margin: 0; font-size: 0.8rem; }
+.md-typeset .wbox p::first-line { line-height: 1.6; }
+
+.md-typeset .wbox.use {
+  border-left: 4px solid #2ecc71;
+  background: linear-gradient(180deg, rgba(46,204,113,0.12), rgba(46,204,113,0.02));
+}
+.md-typeset .wbox.avoid {
+  border-left: 4px solid #ff4d4d;
+  background: linear-gradient(180deg, rgba(255,77,77,0.12), rgba(255,77,77,0.02));
+}
+/* Recolor the leading Use / Not label and prefix a marker */
+.md-typeset .wbox.use strong:first-child   { color: #46d17f; }
+.md-typeset .wbox.avoid strong:first-child { color: #ff6b6b; }
+.md-typeset .wbox.use p::before   { content: "✓ "; color: #46d17f; font-weight: 700; }
+.md-typeset .wbox.avoid p::before { content: "✕ "; color: #ff6b6b; font-weight: 700; }
+
+/* Guarantee the left nav scrolls independently to reach every sprint */
+.md-sidebar--primary { z-index: 5; }
+.md-sidebar--primary .md-sidebar__scrollwrap {
+  overflow-y: auto; max-height: calc(100vh - 5.4rem); scrollbar-width: thin;
+}
+.md-sidebar__scrollwrap::-webkit-scrollbar { width: 9px; }
+/* Prev/next page footer flow */
+.md-footer__inner { border-top: 1px solid rgba(255,77,77,0.35); }
+
+/* ==========================================================================
+   Code tabs (Java/Python/C++) — pure-CSS switching so they work in the
+   static file build without depending on Material's JS slider.
+   ========================================================================== */
+.md-typeset .tabbed-content { display: block !important; transform: none !important; }
+.md-typeset .tabbed-block { display: none !important; }
+.md-typeset .tabbed-set > input:nth-of-type(1):checked ~ .tabbed-content > .tabbed-block:nth-of-type(1),
+.md-typeset .tabbed-set > input:nth-of-type(2):checked ~ .tabbed-content > .tabbed-block:nth-of-type(2),
+.md-typeset .tabbed-set > input:nth-of-type(3):checked ~ .tabbed-content > .tabbed-block:nth-of-type(3),
+.md-typeset .tabbed-set > input:nth-of-type(4):checked ~ .tabbed-content > .tabbed-block:nth-of-type(4) {
+  display: block !important;
+}
+/* active tab label gets the red accent + underline */
+.md-typeset .tabbed-set > input:nth-of-type(1):checked ~ .tabbed-labels > label:nth-of-type(1),
+.md-typeset .tabbed-set > input:nth-of-type(2):checked ~ .tabbed-labels > label:nth-of-type(2),
+.md-typeset .tabbed-set > input:nth-of-type(3):checked ~ .tabbed-labels > label:nth-of-type(3),
+.md-typeset .tabbed-set > input:nth-of-type(4):checked ~ .tabbed-labels > label:nth-of-type(4) {
+  color: #ff6b6b; border-bottom: 2px solid #ff4d4d;
+}
+.md-typeset .tabbed-labels > label { cursor: pointer; }

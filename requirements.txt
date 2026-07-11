@@ -1,0 +1,8 @@
+# DSA Pattern Vault — docs toolchain
+mkdocs-material>=9.5
+mkdocs-print-site-plugin>=2.4
+pymdown-extensions>=10.7
+
+# Anki deck builder (Phase 2a)
+genanki>=0.13
+PyYAML>=6.0

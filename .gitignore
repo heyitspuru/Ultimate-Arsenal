@@ -1,0 +1,31 @@
+# MkDocs build output
+_build/
+site/*.html.bak
+site-preview/
+
+# Git bundle / transfer artifacts
+*.bundle
+
+# FUSE leftovers
+.fuse_hidden*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Anki build artifacts
+anki/*.apkg
+anki/cards.csv
+
+# Next.js (Phase 2b)
+app/node_modules/
+app/.next/
+app/out/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
