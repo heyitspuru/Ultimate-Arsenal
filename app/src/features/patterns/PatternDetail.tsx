@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { diffClass, patternBySlug } from "../../lib/content";
-import RevealGate from "./RevealGate";
+import SignalGate from "./SignalGate";
 import DiagramPanel from "./DiagramPanel";
 import TemplateTabs from "./TemplateTabs";
 
@@ -41,20 +41,18 @@ export default function PatternDetail() {
         {p.name}
       </h1>
 
-      <h2>Signal keywords</h2>
-      <div>
-        {p.signals.map((s) => (
-          <span key={s} className="chip">
-            {s}
-          </span>
-        ))}
-      </div>
+      {/* Everything below is the recall payload — gated so you retrieve first.
+          (Signal chips are NOT pre-shown: picking the true signal IS the gate.) */}
+      <SignalGate pattern={p}>
+        <h2>Signal keywords</h2>
+        <div>
+          {p.signals.map((s) => (
+            <span key={s} className="chip">
+              {s}
+            </span>
+          ))}
+        </div>
 
-      {/* Everything below is the recall payload — gated so you retrieve first. */}
-      <RevealGate
-        prompt={`Before revealing: say the mnemonic out loud, then sketch the ${p.name} template in your head. What's the core loop? The complexity?`}
-        cta="I recalled it — reveal"
-      >
         <div className="mnemonic">
           Mnemonic: <strong>{p.mnemonic}</strong>
         </div>
@@ -95,7 +93,7 @@ export default function PatternDetail() {
             </li>
           ))}
         </ul>
-      </RevealGate>
+      </SignalGate>
 
       <h2>Canonical problems</h2>
       <p className="small dim">Re-solve, don't re-read — open one and drill it.</p>
