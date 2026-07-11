@@ -118,7 +118,11 @@ flowchart LR
 **Time O(n)** — each index enters and leaves the window once. **Space O(k)** — the running summary (freq map ≤ k keys); O(1) if a scalar sum.
 
 ## Pitfalls
-Shrinking with `if` instead of `while`; forgetting to update the running summary on *both* edges; off-by-one on window length (`right - left + 1`); fixed-size windows don't need the while loop — just pop the element leaving at `right - k`.
+
+- Shrinking with `if` instead of `while`.
+- Forgetting to update the running summary on *both* edges.
+- Off-by-one on window length (`right - left + 1`).
+- Fixed-size windows don't need the while loop — just pop the element leaving at `right - k`.
 
 ## Canonical problems
 1. [Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i/) <span class="diff-e">Easy</span>
