@@ -19,10 +19,10 @@ venv/
 anki/*.apkg
 anki/cards.csv
 
-# Next.js (Phase 2b)
+# React app (Vite)
 app/node_modules/
-app/.next/
-app/out/
+app/dist/
+app/src/content/generated/
 
 # OS / editor
 .DS_Store
