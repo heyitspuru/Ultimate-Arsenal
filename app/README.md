@@ -20,9 +20,20 @@ npm run preview    # serve the production build
 
 ## Deploy (Vercel)
 
-Project settings: Root Directory = `app`, framework preset Vite, build command
-`npm run build`, output `dist`. `vercel.json` rewrites all routes to `index.html`
-(SPA). The build reads `../content` from the repo checkout.
+**Live:** https://ultimate-arsenal.vercel.app (project `ultimate-arsenal`)
+
+```bash
+npm run deploy     # build locally, upload prebuilt static output to production
+```
+
+The deploy is prebuilt (Build Output API): the content pipeline and Vite build
+run locally where `../content` exists, and only `dist/` is uploaded — no cloud
+build, nothing to configure on Vercel. SPA rewrite lives in the generated
+`.vercel/output/config.json` (and `vercel.json` for any dashboard-built deploys).
+
+Optional alternative — auto-deploy on git push: connect the GitHub repo in the
+Vercel dashboard and set Root Directory = `app` (the cloud build then reads
+`../content` from the full repo checkout).
 
 ## Structure
 

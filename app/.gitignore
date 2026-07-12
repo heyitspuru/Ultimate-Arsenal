@@ -25,3 +25,6 @@ src/content/generated/
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
+.env*
