@@ -54,6 +54,10 @@
 | String Matching (KMP) | O(n + m) | O(m) |
 | Interval DP | O(n³) | O(n²) |
 | LRU / LFU Design | O(1) / op | O(capacity) |
+| Floyd-Warshall | O(V³) | O(V²) |
+| Range Queries (SegTree / BIT) | O(log n) / op | O(n) |
+| Bitmask DP | O(2ⁿ · n²) | O(2ⁿ · n) |
+| Monotonic Deque | O(n) | O(k) |
 
 ## Growth reference
 

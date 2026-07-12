@@ -41,7 +41,7 @@ python site/build_pdf.py      # -> dsa-pattern-vault.pdf (repo root)
 
 ```
 content/           # single source of truth
-  patterns/        # 31 pattern one-pagers (NN-slug.md)
+  patterns/        # 35 pattern one-pagers (NN-slug.md)
   masters/         # keyword lookup · decision flowchart · complexity · pattern map
   _TEMPLATE.md     # the fixed 8-section one-pager template (+ live sample)
 anki/build_deck.py # -> cards.csv + .apkg (3 card types)
@@ -60,7 +60,7 @@ app/               # TypeScript + React recall app (see app/README.md)
 
 ## Status
 
-- [x] Phase 0–1 — 31 one-pagers + 4 masters
+- [x] Phase 0–1 — 35 one-pagers (Sprints 1–5) + 4 masters
 - [x] Phase 2a — Anki deck (FSRS-ready)
 - [x] PDF v1 — offline revision pack
 - [x] Phase 2b — interactive recall app (quiz · FSRS review · drills · dashboard)

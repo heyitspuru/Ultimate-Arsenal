@@ -35,6 +35,10 @@
 | find a pattern in text, KMP, repeated substring | String Matching | [→](../patterns/29-string-matching.md) |
 | answer for range [i,j] from splits, burst balloons | Interval DP | [→](../patterns/30-interval-dp.md) |
 | design a cache, LRU/LFU, O(1) get/put | LRU / LFU Design | [→](../patterns/31-lru-lfu-design.md) |
+| shortest path between EVERY pair, small n, transitive closure | Floyd-Warshall | [→](../patterns/32-floyd-warshall.md) |
+| range sum/min WITH updates, count smaller so far, inversions | Range Queries (Segment Tree / BIT) | [→](../patterns/33-range-queries.md) |
+| n ≤ 20, assign/visit ALL, TSP-style tours | Bitmask DP | [→](../patterns/34-bitmask-dp.md) |
+| max/min of every size-k window, windowed DP max | Monotonic Deque | [→](../patterns/35-monotonic-deque.md) |
 
 ## Fast tie-breakers
 

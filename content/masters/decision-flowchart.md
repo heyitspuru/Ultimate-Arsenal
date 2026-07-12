@@ -43,11 +43,16 @@ flowchart TD
   GR -->|"weighted shortest path"| DIJ[Dijkstra / Bellman-Ford]:::hot
   GR -->|"connect all at min cost"| MSTN[Minimum Spanning Tree]
   GR -->|"SCC · bridges · articulation"| TAR[Tarjan]
+  GR -->|"EVERY pair · small n"| FW[Floyd-Warshall]
 
   DS -->|"String search / matching"| SM[String Matching - KMP]:::hot
 
   OPT -->|"range [i,j] from splits"| IDP[Interval DP]
+  OPT -->|"n ≤ 20 · DP over subsets"| BMD[Bitmask DP]:::hot
   DS -->|"cache · O(1) get/put design"| LRU[LRU / LFU Design]
+
+  ARR -->|"range query + updates"| SG[Segment Tree / BIT]
+  ARR -->|"max/min of each window"| MD[Monotonic Deque]
 
   classDef hot fill:#3a1418,stroke:#ff5c5c,color:#ffffff,stroke-width:2px;
 ```
