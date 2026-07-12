@@ -172,8 +172,10 @@ export function patternSummaries(now = new Date()): Map<string, PatternSummary> 
 export function previewIntervals(item: QueueItem, now = new Date()): Record<number, string> {
   const rec = F.repeat(item.state, now);
   const fmt = (d: Date) => {
-    const days = Math.round((d.getTime() - now.getTime()) / 86400000);
-    if (days < 1) return "<1d";
+    const mins = (d.getTime() - now.getTime()) / 60000;
+    if (mins < 60) return `${Math.max(1, Math.round(mins))}m`;
+    if (mins < 60 * 24) return `${Math.round(mins / 60)}h`;
+    const days = Math.round(mins / (60 * 24));
     if (days < 30) return `${days}d`;
     if (days < 365) return `${Math.round(days / 30)}mo`;
     return `${(days / 365).toFixed(1)}y`;

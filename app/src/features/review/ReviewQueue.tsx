@@ -80,10 +80,10 @@ function CardFace({ card, revealed }: { card: ReviewCard; revealed: boolean }) {
 }
 
 const RATINGS = [
-  { grade: Rating.Again, label: "Again" },
-  { grade: Rating.Hard, label: "Hard" },
-  { grade: Rating.Good, label: "Good" },
-  { grade: Rating.Easy, label: "Easy" },
+  { grade: Rating.Again, label: "Again", meaning: "forgot" },
+  { grade: Rating.Hard, label: "Hard", meaning: "struggled" },
+  { grade: Rating.Good, label: "Good", meaning: "recalled" },
+  { grade: Rating.Easy, label: "Easy", meaning: "instant" },
 ] as const;
 
 export default function ReviewQueue() {
@@ -142,20 +142,30 @@ export default function ReviewQueue() {
             Show answer
           </Button>
         ) : (
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
-            {RATINGS.map((r, i) => (
-              <Button
-                key={r.label}
-                variant={i === 0 ? "outline" : i === 2 ? "default" : "secondary"}
-                className="min-w-[92px] flex-col gap-0 py-1.5 h-auto"
-                onClick={() => grade(r.grade)}
-              >
-                <span>{r.label}</span>
-                {intervals && (
-                  <span className="font-mono text-[10px] opacity-60">{intervals[r.grade]}</span>
-                )}
-              </Button>
-            ))}
+          <div className="mt-6">
+            <p className="text-xs text-muted-foreground">
+              How well did you recall it <em>before</em> revealing? Grading moves you to the next
+              card — the time shows when this one returns.
+            </p>
+            <div className="mt-3 flex flex-wrap justify-center gap-2">
+              {RATINGS.map((r, i) => (
+                <Button
+                  key={r.label}
+                  variant={i === 0 ? "outline" : i === 2 ? "default" : "secondary"}
+                  className="h-auto min-w-[104px] flex-col gap-0 py-1.5"
+                  onClick={() => grade(r.grade)}
+                >
+                  <span>{r.label}</span>
+                  <span className="font-mono text-[10px] opacity-60">
+                    {r.meaning}
+                    {intervals && ` · ${intervals[r.grade]}`}
+                  </span>
+                </Button>
+              ))}
+            </div>
+            <p className="mt-2 text-[11px] text-faint">
+              &ldquo;Again&rdquo; cards come back later in this session.
+            </p>
           </div>
         )}
       </div>
