@@ -5,34 +5,21 @@ import { countsToday, loadLog, patternSummaries } from "../../lib/srs/engine";
 
 function Tile({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
-    <div className="panel" style={{ flex: "1 1 140px", textAlign: "center", padding: "0.9rem" }}>
-      <div style={{ fontFamily: "var(--mono)", fontSize: "1.7rem", fontWeight: 700 }}>{value}</div>
-      <div className="small faint">{label}</div>
-      {hint && <div className="small faint" style={{ opacity: 0.7 }}>{hint}</div>}
+    <div className="flex-1 basis-36 rounded-xl border border-border bg-card p-4 text-center">
+      <div className="font-mono text-2xl font-bold">{value}</div>
+      <div className="text-[11px] uppercase tracking-widest text-faint">{label}</div>
+      {hint && <div className="text-[10px] text-faint opacity-70">{hint}</div>}
     </div>
   );
 }
 
-/** Thin single-hue meter; the % text alongside carries the value (never color alone). */
+/** Thin single-ink meter; the % text alongside carries the value (never color alone). */
 function Meter({ value }: { value: number }) {
   return (
-    <div
-      style={{
-        flex: 1,
-        height: 6,
-        borderRadius: 4,
-        background: "rgba(255,255,255,0.07)",
-        overflow: "hidden",
-      }}
-    >
+    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
       <div
-        style={{
-          width: `${Math.round(value * 100)}%`,
-          height: "100%",
-          borderRadius: 4,
-          background: "var(--accent-soft)",
-          opacity: 0.75,
-        }}
+        className="h-full rounded-full bg-foreground transition-[width] duration-300"
+        style={{ width: `${Math.round(value * 100)}%` }}
       />
     </div>
   );
@@ -72,9 +59,9 @@ export default function Dashboard() {
 
   return (
     <>
-      <h1>Dashboard</h1>
+      <h1 className="mt-8 text-3xl font-bold tracking-tight">Dashboard</h1>
 
-      <div className="row" style={{ alignItems: "stretch" }}>
+      <div className="mt-4 flex flex-wrap gap-3">
         <Tile label="due now" value={counts.due} />
         <Tile label="new available" value={counts.fresh} hint="10/day cap" />
         <Tile label="reviews today" value={reviewsToday} />
@@ -82,24 +69,41 @@ export default function Dashboard() {
       </div>
 
       {!anyHistory ? (
-        <div className="panel mt2" style={{ textAlign: "center", padding: "1.6rem" }}>
-          <p style={{ margin: 0 }}>No review history yet.</p>
-          <p className="dim small">
-            Start a <Link to="/review">review session</Link> — strength per pattern shows up here.
+        <div className="mt-6 rounded-xl border border-border bg-card p-8 text-center">
+          <p className="font-display font-semibold">No review history yet.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Start a{" "}
+            <Link className="underline underline-offset-2" to="/review" viewTransition>
+              review session
+            </Link>{" "}
+            — strength per pattern shows up here.
           </p>
         </div>
       ) : (
         <>
           {weak.length > 0 && (
             <>
-              <h2>Weak patterns</h2>
-              <ul>
+              <h2 className="label-mono mt-8 mb-2">Weak patterns</h2>
+              <ul className="space-y-1.5">
                 {weak.map(({ p, s }) => (
-                  <li key={p.slug}>
-                    <Link to={`/patterns/${p.slug}`}>{p.name}</Link>{" "}
-                    <span className="faint small">
+                  <li key={p.slug} className="text-sm">
+                    <Link
+                      className="font-semibold underline underline-offset-4"
+                      to={`/patterns/${p.slug}`}
+                      viewTransition
+                    >
+                      {p.name}
+                    </Link>{" "}
+                    <span className="text-xs text-faint">
                       {Math.round((s!.strength ?? 0) * 100)}% over {s!.reviews} reviews — re-gate
-                      the page, then <Link to={`/drill/template/${p.slug}`}>drill the template</Link>
+                      the page, then{" "}
+                      <Link
+                        className="underline underline-offset-2"
+                        to={`/drill/template/${p.slug}`}
+                        viewTransition
+                      >
+                        drill the template
+                      </Link>
                     </span>
                   </li>
                 ))}
@@ -107,24 +111,22 @@ export default function Dashboard() {
             </>
           )}
 
-          <h2>Per-pattern strength</h2>
-          <p className="small faint">Share of reviews rated Good or Easy.</p>
-          <div style={{ display: "grid", gap: "0.45rem" }}>
+          <h2 className="label-mono mt-8 mb-1">Per-pattern strength</h2>
+          <p className="text-xs text-faint">Share of reviews rated Good or Easy.</p>
+          <div className="mt-3 grid gap-2">
             {rows.map(({ p, s }) => (
-              <div key={p.slug} className="row" style={{ gap: "0.7rem" }}>
+              <div key={p.slug} className="flex items-center gap-3">
                 <Link
+                  className="w-48 truncate text-[13px] text-muted-foreground hover:text-foreground"
                   to={`/patterns/${p.slug}`}
-                  style={{ width: 200, fontSize: "0.82rem", color: "var(--fg-dim)" }}
+                  viewTransition
                 >
                   {p.name}
                 </Link>
                 <Meter value={s!.strength ?? 0} />
-                <span
-                  className="small"
-                  style={{ width: 88, fontFamily: "var(--mono)", textAlign: "right" }}
-                >
+                <span className="w-24 text-right font-mono text-xs">
                   {s!.strength === null ? "—" : `${Math.round(s!.strength * 100)}%`}
-                  {s!.dueNow > 0 && <span className="faint"> · {s!.dueNow} due</span>}
+                  {s!.dueNow > 0 && <span className="text-faint"> · {s!.dueNow} due</span>}
                 </span>
               </div>
             ))}

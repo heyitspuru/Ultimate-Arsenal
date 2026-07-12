@@ -24,7 +24,3 @@ export const SPRINTS: { sprint: number; tier: string; patterns: Pattern[] }[] = 
     .sort(([a], [b]) => a - b)
     .map(([sprint, patterns]) => ({ sprint, tier: patterns[0]?.tier ?? "", patterns }));
 })();
-
-export function diffClass(diff: string): string {
-  return diff === "Easy" ? "diff-e" : diff === "Hard" ? "diff-h" : "diff-m";
-}

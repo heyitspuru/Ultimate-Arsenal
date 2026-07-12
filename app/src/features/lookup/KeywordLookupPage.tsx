@@ -1,6 +1,16 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { KEYWORD_LOOKUP, patternBySlug } from "../../lib/content";
 import type { KeywordRow } from "../../content/types";
 
@@ -19,42 +29,38 @@ function FlashCard() {
   const pattern = patternBySlug(row.slug);
 
   return (
-    <div className="panel" style={{ textAlign: "center", padding: "1.6rem" }}>
-      <p className="small faint" style={{ margin: 0 }}>
-        The problem says&hellip;
-      </p>
-      <p style={{ fontSize: "1.15rem", fontFamily: "var(--mono)", margin: "0.6rem 0 1rem" }}>
-        &ldquo;{row.phrase}&rdquo;
-      </p>
+    <div className="mt-5 rounded-xl border border-border bg-card p-8 text-center">
+      <p className="label-mono">the problem says</p>
+      <p className="mt-2 mb-4 font-mono text-lg">&ldquo;{row.phrase}&rdquo;</p>
       {revealed ? (
-        <>
-          <p style={{ margin: "0.4rem 0" }}>
+        <div className="animate-pop">
+          <p className="text-sm">
             Reach for{" "}
-            <Link to={`/patterns/${row.slug}`} style={{ fontWeight: 700 }}>
+            <Link
+              className="font-bold underline underline-offset-4"
+              to={`/patterns/${row.slug}`}
+              viewTransition
+            >
               {row.pattern}
             </Link>
           </p>
-          {pattern && (
-            <p className="dim small" style={{ fontStyle: "italic" }}>
-              {pattern.mnemonic}
-            </p>
-          )}
-          <button
-            className="btn primary"
+          {pattern && <p className="mt-1 text-xs italic text-muted-foreground">{pattern.mnemonic}</p>}
+          <Button
+            className="mt-4"
             onClick={() => {
               setRow(randomRow(row));
               setRevealed(false);
             }}
           >
             Next phrase
-          </button>
-        </>
+          </Button>
+        </div>
       ) : (
         <>
-          <p className="dim small">Which pattern? Answer out loud, then check.</p>
-          <button className="btn primary" onClick={() => setRevealed(true)}>
+          <p className="text-xs text-muted-foreground">Which pattern? Answer out loud, then check.</p>
+          <Button className="mt-4" onClick={() => setRevealed(true)}>
             Check answer
-          </button>
+          </Button>
         </>
       )}
     </div>
@@ -73,45 +79,45 @@ export default function KeywordLookupPage() {
 
   return (
     <>
-      <h1>Keyword &rarr; Pattern</h1>
-      <p className="dim small">
+      <h1 className="mt-8 text-3xl font-bold tracking-tight">Keyword → Pattern</h1>
+      <p className="text-sm text-muted-foreground">
         Drill the reflex: phrase in, pattern out, in under 10 seconds.
       </p>
 
       <FlashCard />
 
-      <h2>Lookup table</h2>
-      <input
-        className="search"
+      <h2 className="label-mono mt-10 mb-3">Lookup table</h2>
+      <Input
+        className="max-w-sm font-mono text-xs"
         placeholder="filter phrases or patterns…"
         value={q}
         onChange={(e) => setQ(e.target.value)}
       />
-      <div className="tablewrap">
-        <table className="vault">
-          <thead>
-            <tr>
-              <th>If the problem says&hellip;</th>
-              <th>Reach for</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((r) => (
-              <tr key={r.phrase}>
-                <td>{r.phrase}</td>
-                <td>
-                  <Link to={`/patterns/${r.slug}`}>{r.pattern}</Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Table className="mt-3">
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="label-mono before:content-none">If the problem says…</TableHead>
+            <TableHead className="label-mono before:content-none">Reach for</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filtered.map((r) => (
+            <TableRow key={r.phrase}>
+              <TableCell className="whitespace-normal text-[13px]">{r.phrase}</TableCell>
+              <TableCell>
+                <Link className="link-draw text-[13px]" to={`/patterns/${r.slug}`} viewTransition>
+                  {r.pattern}
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-      <h2>Fast tie-breakers</h2>
-      <ul>
+      <h2 className="label-mono mt-10 mb-2">Fast tie-breakers</h2>
+      <ul className="space-y-1.5">
         {KEYWORD_LOOKUP.tieBreakers.map((t, i) => (
-          <li key={i} className="md">
+          <li key={i} className="md text-sm [&_strong]:font-semibold">
             <Markdown>{t}</Markdown>
           </li>
         ))}

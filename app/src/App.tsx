@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { NavLink, Outlet, ScrollRestoration, useLocation } from "react-router-dom";
+import SideRays from "@/components/SideRays";
 import { countsToday } from "./lib/srs/engine";
 
 const LINKS = [
@@ -15,6 +16,7 @@ const LINKS = [
 
 export default function App() {
   const location = useLocation();
+  const isHome = location.pathname === "/";
   // refresh the due badge whenever the route changes (cheap: one localStorage read)
   const due = useMemo(() => {
     const c = countsToday();
@@ -24,20 +26,58 @@ export default function App() {
 
   return (
     <>
-      <header className="topbar">
-        <NavLink to="/" className="brand">
-          DSA Pattern <span className="accent">Vault</span>
-        </NavLink>
-        <nav>
-          {LINKS.map((l) => (
-            <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? "active" : "")}>
-              {l.label}
-              {l.to === "/review" && due > 0 && <span className="nav-badge">{due}</span>}
-            </NavLink>
-          ))}
-        </nav>
+      {/* quiet monochrome rays behind inner pages; the home hero has its own */}
+      {!isHome && (
+        <div className="pointer-events-none fixed inset-0 z-0 opacity-25">
+          <SideRays
+            rayColor1="#ffffff"
+            rayColor2="#9a9a9a"
+            saturation={0}
+            intensity={1.1}
+            speed={1.2}
+            spread={2.4}
+            origin="top-right"
+            className="h-full w-full"
+          />
+        </div>
+      )}
+
+      <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-5xl items-center gap-6 px-5 py-3">
+          <NavLink
+            to="/"
+            viewTransition
+            className="font-mono text-sm font-bold tracking-tight whitespace-nowrap"
+          >
+            DSA<span className="text-muted-foreground">//</span>VAULT
+          </NavLink>
+          <nav className="flex flex-wrap gap-x-5 gap-y-1">
+            {LINKS.map((l) => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                viewTransition
+                className={({ isActive }) =>
+                  `relative py-0.5 text-[13px] transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
+                    isActive
+                      ? "text-foreground after:right-0"
+                      : "text-muted-foreground after:right-full hover:text-foreground"
+                  }`
+                }
+              >
+                {l.label}
+                {l.to === "/review" && due > 0 && (
+                  <span className="ml-1.5 inline-block min-w-[1.2rem] rounded-full bg-primary px-1 text-center font-mono text-[10px] font-bold leading-[1.5] text-primary-foreground">
+                    {due}
+                  </span>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
       </header>
-      <main className="shell">
+
+      <main className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-16">
         <Outlet />
       </main>
       <ScrollRestoration />

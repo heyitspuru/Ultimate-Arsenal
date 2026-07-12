@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { PATTERNS } from "../../lib/content";
 import { makeQuestion, type QuizQuestion } from "./quizEngine";
 import PatternGuessWidget from "./PatternGuessWidget";
@@ -31,38 +33,36 @@ export default function PatternPickerQuiz() {
 
   return (
     <>
-      <h1>Pattern Picker</h1>
-      <p className="dim small">
+      <h1 className="mt-8 text-3xl font-bold tracking-tight">Pattern Picker</h1>
+      <p className="text-sm text-muted-foreground">
         Interleaved across all {PATTERNS.length} patterns — the cue could be anything. That&rsquo;s
         the point.
       </p>
 
       {finished ? (
-        <div className="panel" style={{ textAlign: "center", padding: "2rem" }}>
-          <p className="small faint" style={{ margin: 0 }}>
-            Round complete
+        <div className="mt-6 rounded-xl border border-border bg-card p-10 text-center">
+          <p className="label-mono">round complete</p>
+          <p className="my-3 font-mono text-5xl font-bold">
+            {score}<span className="text-muted-foreground">/{ROUND}</span>
           </p>
-          <p style={{ fontSize: "2.2rem", fontFamily: "var(--mono)", margin: "0.4rem 0" }}>
-            {score} / {ROUND}
-          </p>
-          <p className="dim small">
+          <p className="mx-auto max-w-sm text-sm text-muted-foreground">
             {score === ROUND
               ? "Clean sweep. Raise the bar: do a round right after waking up."
               : score >= 7
                 ? "Solid. The misses are your weak patterns — open their pages and re-gate."
                 : "Below 70% — drill the keyword lookup for a few minutes, then retry."}
           </p>
-          <button className="btn primary" onClick={restart}>
+          <Button className="mt-5" onClick={restart}>
             New round
-          </button>
+          </Button>
         </div>
       ) : (
         <>
-          <p className="small faint" style={{ fontFamily: "var(--mono)", marginBottom: 0 }}>
-            question {n} / {ROUND} &middot; score {score}
-          </p>
-          <div className="progress">
-            <div style={{ width: `${((n - 1) / ROUND) * 100}%` }} />
+          <div className="mt-4 mb-4 flex items-center gap-4">
+            <span className="whitespace-nowrap font-mono text-xs text-faint">
+              {n} / {ROUND} · score {score}
+            </span>
+            <Progress value={((n - 1) / ROUND) * 100} className="h-1" />
           </div>
           <PatternGuessWidget
             question={question}

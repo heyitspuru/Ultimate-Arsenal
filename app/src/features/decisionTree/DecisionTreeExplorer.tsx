@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Markdown from "react-markdown";
+import { Button } from "@/components/ui/button";
 import { DECISION_ROOT, DECISION_TREE, TIE_QUESTIONS } from "../../content/decision-tree";
 import { patternBySlug } from "../../lib/content";
 
@@ -22,58 +23,49 @@ export default function DecisionTreeExplorer() {
 
   return (
     <>
-      <h1>Decision Tree</h1>
-      <p className="dim small">
+      <h1 className="mt-8 text-3xl font-bold tracking-tight">Decision Tree</h1>
+      <p className="text-sm text-muted-foreground">
         Answer each question; land on a pattern. Use this when the keyword table didn&rsquo;t give
         an instant hit.
       </p>
 
       {trail.length > 0 && (
-        <p className="dt-crumbs">
-          {trail.join(" → ")}
-          {" · "}
-          <a onClick={restart} style={{ cursor: "pointer" }}>
+        <p className="mt-3 font-mono text-xs text-faint">
+          {trail.join(" → ")} ·{" "}
+          <button className="cursor-pointer underline underline-offset-2 hover:text-foreground" onClick={restart}>
             restart
-          </a>
+          </button>
         </p>
       )}
 
       {pattern ? (
-        <div className="panel" style={{ textAlign: "center", padding: "1.8rem" }}>
-          <p className="small faint" style={{ margin: 0 }}>
-            You landed on
-          </p>
-          <h2 style={{ border: "none", padding: 0, fontSize: "1.5rem", margin: "0.4rem 0" }}>
-            {pattern.name}
-          </h2>
-          <p className="dim" style={{ fontStyle: "italic" }}>
-            {pattern.mnemonic}
-          </p>
-          <div
-            className="wbox use"
-            style={{ textAlign: "left", margin: "0.8rem auto", maxWidth: 560 }}
-          >
-            <div className="md">
-              <Markdown>{pattern.use}</Markdown>
-            </div>
+        <div className="mt-5 animate-pop rounded-xl border border-border bg-card p-8 text-center">
+          <p className="label-mono">you landed on</p>
+          <h2 className="mt-2 font-display text-3xl font-bold">{pattern.name}</h2>
+          <p className="mt-1 text-sm italic text-muted-foreground">{pattern.mnemonic}</p>
+          <div className="mx-auto mt-4 max-w-lg rounded-lg border border-border p-4 text-left text-sm [&_strong]:font-semibold">
+            <Markdown>{pattern.use}</Markdown>
           </div>
-          <div className="row" style={{ justifyContent: "center" }}>
-            <Link className="btn primary" to={`/patterns/${pattern.slug}`}>
-              Open {pattern.name}
-            </Link>
-            <button className="btn ghost" onClick={restart}>
+          <div className="mt-5 flex justify-center gap-3">
+            <Button asChild>
+              <Link to={`/patterns/${pattern.slug}`} viewTransition>
+                Open {pattern.name}
+              </Link>
+            </Button>
+            <Button variant="ghost" onClick={restart}>
               Start over
-            </button>
+            </Button>
           </div>
         </div>
       ) : node ? (
-        <div className="panel" style={{ padding: "1.4rem" }}>
-          <h2 style={{ border: "none", padding: 0, margin: "0 0 0.4rem" }}>{node.question}</h2>
-          <div className="dt-options">
+        <div className="mt-5 rounded-xl border border-border bg-card p-6">
+          <h2 className="font-display text-lg font-semibold">{node.question}</h2>
+          <div className="mt-4 flex flex-col gap-2">
             {node.options.map((o) => (
-              <button
+              <Button
                 key={o.label}
-                className="btn"
+                variant="outline"
+                className="h-auto justify-start whitespace-normal py-2.5 text-left"
                 onClick={() => {
                   setTrail((t) => [...t, o.label]);
                   if (o.slug) setLanded(o.slug);
@@ -81,16 +73,16 @@ export default function DecisionTreeExplorer() {
                 }}
               >
                 {o.label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
       ) : null}
 
-      <h2>Three questions that resolve most ties</h2>
-      <ol>
+      <h2 className="label-mono mt-10 mb-2">Three questions that resolve most ties</h2>
+      <ol className="list-decimal space-y-1.5 pl-5">
         {TIE_QUESTIONS.map((t, i) => (
-          <li key={i} className="md">
+          <li key={i} className="md text-sm [&_strong]:font-semibold">
             <Markdown>{t}</Markdown>
           </li>
         ))}

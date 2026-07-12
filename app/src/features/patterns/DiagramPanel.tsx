@@ -12,13 +12,13 @@ function loadMermaid() {
         theme: "base",
         themeVariables: {
           darkMode: true,
-          background: "#0e0e11",
-          primaryColor: "#131319",
-          primaryTextColor: "#e8e8ec",
-          primaryBorderColor: "#3a3a44",
-          lineColor: "#83858f",
-          secondaryColor: "#1a1a20",
-          tertiaryColor: "#131319",
+          background: "#050505",
+          primaryColor: "#111111",
+          primaryTextColor: "#fafafa",
+          primaryBorderColor: "#555555",
+          lineColor: "#8a8a8a",
+          secondaryColor: "#161616",
+          tertiaryColor: "#111111",
           fontFamily: "JetBrains Mono, monospace",
           fontSize: "13px",
         },
@@ -31,6 +31,16 @@ function loadMermaid() {
 
 let uid = 0;
 
+/** Content sources carry a red `hot` classDef from the old theme — rewrite it
+ *  to inverted white-on-black emphasis before rendering (mermaid's generated
+ *  per-diagram stylesheet outspecifies anything we could inject via themeCSS). */
+function monochromize(source: string): string {
+  return source.replace(
+    /classDef\s+hot\s+[^\n;]*/g,
+    "classDef hot fill:#fafafa,stroke:#fafafa,color:#050505,stroke-width:2px",
+  );
+}
+
 export default function DiagramPanel({ source }: { source: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState(false);
@@ -38,7 +48,7 @@ export default function DiagramPanel({ source }: { source: string }) {
   useEffect(() => {
     let cancelled = false;
     loadMermaid()
-      .then((mermaid) => mermaid.render(`vault-diagram-${uid++}`, source))
+      .then((mermaid) => mermaid.render(`vault-diagram-${uid++}`, monochromize(source)))
       .then(({ svg }) => {
         if (!cancelled && ref.current) ref.current.innerHTML = svg;
       })
@@ -51,7 +61,17 @@ export default function DiagramPanel({ source }: { source: string }) {
   }, [source]);
 
   if (error) {
-    return <pre className="code">{source}</pre>; // legible fallback, mirrors the PDF's boxed source
+    // legible fallback, mirrors the PDF's boxed source
+    return (
+      <pre className="overflow-x-auto rounded-lg border border-border bg-card p-4 font-mono text-xs">
+        {source}
+      </pre>
+    );
   }
-  return <div className="panel" style={{ overflowX: "auto" }} ref={ref} />;
+  return (
+    <div
+      className="overflow-x-auto rounded-xl border border-border bg-card p-4 [&_svg]:mx-auto"
+      ref={ref}
+    />
+  );
 }

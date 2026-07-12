@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { Check, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { PATTERNS, patternBySlug } from "../../lib/content";
 import { clozeLines } from "../../lib/srs/cards";
 
@@ -25,9 +27,11 @@ export default function TemplateDrill() {
   if (!pattern || !pattern.templates.java.trim()) {
     return (
       <>
-        <h1>Nothing to drill here</h1>
-        <p>
-          <Link to="/drill/template">Try a random template</Link>
+        <h1 className="mt-8 text-3xl font-bold">Nothing to drill here</h1>
+        <p className="mt-2">
+          <Link className="link-draw" to="/drill/template" viewTransition>
+            Try a random template
+          </Link>
         </p>
       </>
     );
@@ -63,22 +67,27 @@ function Drill({ slug, onNext }: { slug: string; onNext: () => void }) {
   let blankIdx = -1;
   return (
     <>
-      <p className="small faint" style={{ marginTop: "1rem" }}>
-        <Link to="/drill/template">Template drill</Link> &middot;{" "}
-        <Link to={`/patterns/${pattern.slug}`}>{pattern.name}</Link>
+      <p className="mt-6 text-xs text-faint">
+        <Link className="text-muted-foreground hover:text-foreground" to="/drill/template" viewTransition>
+          Template drill
+        </Link>{" "}
+        ·{" "}
+        <Link className="text-muted-foreground hover:text-foreground" to={`/patterns/${pattern.slug}`} viewTransition>
+          {pattern.name}
+        </Link>
       </p>
-      <h1>Fill the blanks — {pattern.name}</h1>
-      <p className="dim small">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight">Fill the blanks — {pattern.name}</h1>
+      <p className="text-sm text-muted-foreground">
         Type each missing line (whitespace doesn&rsquo;t matter). The comment is your hint.
       </p>
 
-      <pre className="code">
+      <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-5 font-mono text-[13px] leading-loose">
         {lines.map((l, i) => {
           if (!l.blank) {
             return (
               <div key={i}>
-                {l.text || " "}
-                {l.comment && <span style={{ color: "var(--fg-faint)" }}> {"//"} {l.comment}</span>}
+                {l.text || " "}
+                {l.comment && <span className="text-faint"> {"//"} {l.comment}</span>}
               </div>
             );
           }
@@ -87,10 +96,10 @@ function Drill({ slug, onNext }: { slug: string; onNext: () => void }) {
           const indent = l.text.match(/^\s*/)?.[0] ?? "";
           const ok = results[bi];
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div key={i} className="flex items-center gap-1.5">
               <span>{indent}</span>
               {shown ? (
-                <span style={{ color: "var(--green)" }}>{l.text.trim()}</span>
+                <span className="bg-secondary px-1 font-semibold">{l.text.trim()}</span>
               ) : (
                 <input
                   value={answers[bi]}
@@ -102,55 +111,45 @@ function Drill({ slug, onNext }: { slug: string; onNext: () => void }) {
                   }}
                   spellCheck={false}
                   placeholder="…"
-                  style={{
-                    flex: 1,
-                    maxWidth: 460,
-                    fontFamily: "var(--mono)",
-                    fontSize: "0.8rem",
-                    color: "var(--fg)",
-                    background: "rgba(255,255,255,0.04)",
-                    border: `1px solid ${
-                      checked ? (ok ? "var(--green)" : "var(--accent)") : "rgba(255,255,255,0.18)"
-                    }`,
-                    borderRadius: 5,
-                    padding: "0.15rem 0.5rem",
-                    outline: "none",
-                  }}
+                  className={`w-full max-w-md rounded border bg-background px-2 py-0.5 font-mono text-[13px] outline-none transition-colors ${
+                    checked
+                      ? ok
+                        ? "border-foreground"
+                        : "border-foreground border-dashed line-through"
+                      : "border-input focus:border-foreground/60"
+                  }`}
                 />
               )}
-              {l.comment && <span style={{ color: "var(--fg-faint)" }}>{"//"} {l.comment}</span>}
+              {checked && !shown && (ok ? <Check className="size-3.5 shrink-0" /> : <X className="size-3.5 shrink-0 opacity-60" />)}
+              {l.comment && <span className="text-faint"> {"//"} {l.comment}</span>}
             </div>
           );
         })}
       </pre>
 
-      <div className="row">
+      <div className="mt-4 flex flex-wrap gap-2">
+        {!shown && <Button onClick={() => setChecked(true)}>Check</Button>}
         {!shown && (
-          <button className="btn primary" onClick={() => setChecked(true)}>
-            Check
-          </button>
-        )}
-        {!shown && (
-          <button className="btn ghost" onClick={() => setShown(true)}>
+          <Button variant="ghost" onClick={() => setShown(true)}>
             Show answer
-          </button>
+          </Button>
         )}
-        <button className="btn" onClick={onNext}>
+        <Button variant="outline" onClick={onNext}>
           Next random template
-        </button>
+        </Button>
       </div>
 
       {checked && !shown && (
-        <p style={{ marginTop: "0.8rem" }}>
+        <p className={`mt-4 text-sm font-semibold ${allCorrect ? "animate-pop" : "animate-shake"}`}>
           {allCorrect ? (
-            <strong style={{ color: "var(--green)" }}>
+            <>
               All {blanks.length} correct — {pattern.mnemonic}
-            </strong>
+            </>
           ) : (
-            <strong style={{ color: "var(--accent-soft)" }}>
-              {results.filter(Boolean).length} / {blanks.length} correct — fix the red lines or
+            <>
+              {results.filter(Boolean).length} / {blanks.length} correct — fix the dashed lines or
               reveal.
-            </strong>
+            </>
           )}
         </p>
       )}
