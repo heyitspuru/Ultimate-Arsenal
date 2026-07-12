@@ -39,10 +39,20 @@ export default function PatternGuessWidget({
   return (
     <div className="panel" style={{ padding: "1.4rem" }}>
       <p className="small faint" style={{ margin: 0 }}>
-        {active.promptType === "problem" ? "LeetCode problem" : "The problem says…"}
+        {active.promptType === "problem"
+          ? "LeetCode problem — click to skim the statement"
+          : "The problem says…"}
       </p>
       <p style={{ fontSize: "1.1rem", fontFamily: "var(--mono)", margin: "0.4rem 0 1rem" }}>
-        {active.promptType === "problem" ? active.prompt : `“${active.prompt}”`}
+        {active.promptType === "problem" && active.url ? (
+          <a href={active.url} target="_blank" rel="noreferrer">
+            {active.prompt} ↗
+          </a>
+        ) : active.promptType === "problem" ? (
+          active.prompt
+        ) : (
+          `“${active.prompt}”`
+        )}
       </p>
       <div
         style={{

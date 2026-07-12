@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { PATTERNS } from "../../lib/content";
 import { makeQuestion, type QuizQuestion } from "./quizEngine";
 import PatternGuessWidget from "./PatternGuessWidget";
 
 const ROUND = 10;
+/** every distinct cue in the vault (signals + problem names) */
+const CUE_COUNT = PATTERNS.reduce((n, p) => n + p.signals.length + p.problems.length, 0);
 
 export default function PatternPickerQuiz() {
+  // cues used this session — no repeats until the vault is exhausted
+  const used = useRef(new Set<string>());
   const [n, setN] = useState(1);
   const [score, setScore] = useState(0);
-  const [question, setQuestion] = useState<QuizQuestion>(() => makeQuestion(PATTERNS));
+  const [question, setQuestion] = useState<QuizQuestion>(() =>
+    makeQuestion(PATTERNS, 7, used.current),
+  );
   const [finished, setFinished] = useState(false);
+
+  function nextQuestion(): QuizQuestion {
+    if (used.current.size >= CUE_COUNT) used.current.clear(); // vault exhausted — recycle
+    return makeQuestion(PATTERNS, 7, used.current);
+  }
 
   function restart() {
     setN(1);
     setScore(0);
     setFinished(false);
-    setQuestion(makeQuestion(PATTERNS));
+    setQuestion(nextQuestion());
   }
 
   return (
@@ -57,7 +68,7 @@ export default function PatternPickerQuiz() {
               if (n >= ROUND) setFinished(true);
               else {
                 setN(n + 1);
-                setQuestion(makeQuestion(PATTERNS));
+                setQuestion(nextQuestion());
               }
             }}
             nextLabel={n >= ROUND ? "Finish round" : "Next question"}

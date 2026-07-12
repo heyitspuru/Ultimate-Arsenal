@@ -9,6 +9,8 @@ export interface QuizQuestion {
   /** what's shown: a signal phrase or a real problem name */
   prompt: string;
   promptType: "signal" | "problem";
+  /** LeetCode link — problem prompts only, so the user can peek at the statement */
+  url?: string;
   correct: QuizOption;
   options: QuizOption[]; // shuffled, includes correct
 }
@@ -30,14 +32,32 @@ function sample<T>(arr: T[], n: number): T[] {
  * The interleaving engine: random pattern, random cue (signal phrase or one of
  * its canonical problems), correct answer + distractors. Distractor count 7 →
  * an 8-way choice, hard enough to force real discrimination without scanning
- * a 31-item wall every question.
+ * a 31-item wall every question. Pass `usedPrompts` to avoid repeating a cue
+ * within a session (best-effort: gives up after a bounded number of retries).
  */
-export function makeQuestion(patterns: Pattern[], distractors = 7): QuizQuestion {
-  const p = patterns[Math.floor(Math.random() * patterns.length)];
-  const useProblem = Math.random() < 0.4 && p.problems.length > 0;
-  const prompt = useProblem
-    ? p.problems[Math.floor(Math.random() * p.problems.length)].name
-    : p.signals[Math.floor(Math.random() * p.signals.length)];
+export function makeQuestion(
+  patterns: Pattern[],
+  distractors = 7,
+  usedPrompts?: Set<string>,
+): QuizQuestion {
+  let prompt = "";
+  let url: string | undefined;
+  let p = patterns[0];
+  let useProblem = false;
+  for (let attempt = 0; attempt < 30; attempt++) {
+    p = patterns[Math.floor(Math.random() * patterns.length)];
+    useProblem = Math.random() < 0.4 && p.problems.length > 0;
+    if (useProblem) {
+      const prob = p.problems[Math.floor(Math.random() * p.problems.length)];
+      prompt = prob.name;
+      url = prob.url;
+    } else {
+      prompt = p.signals[Math.floor(Math.random() * p.signals.length)];
+      url = undefined;
+    }
+    if (!usedPrompts?.has(prompt)) break;
+  }
+  usedPrompts?.add(prompt);
   const correct = { slug: p.slug, name: p.name };
   const others = sample(
     patterns.filter((x) => x.slug !== p.slug),
@@ -46,6 +66,7 @@ export function makeQuestion(patterns: Pattern[], distractors = 7): QuizQuestion
   return {
     prompt,
     promptType: useProblem ? "problem" : "signal",
+    url,
     correct,
     options: shuffle([correct, ...others]),
   };
