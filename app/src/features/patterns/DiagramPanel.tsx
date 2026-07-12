@@ -2,31 +2,36 @@ import { useEffect, useRef, useState } from "react";
 
 let mermaidReady: Promise<typeof import("mermaid")["default"]> | null = null;
 
-/** Self-hosted Mermaid (dynamic import — keeps it out of the main bundle),
- *  themed to the vault's charcoal/red palette (replaces content/js/mermaid-init.js). */
+/** Self-hosted Mermaid (dynamic import — keeps it out of the main bundle). */
 function loadMermaid() {
   if (!mermaidReady) {
-    mermaidReady = import("mermaid").then((m) => {
-      m.default.initialize({
-        startOnLoad: false,
-        theme: "base",
-        themeVariables: {
-          darkMode: true,
-          background: "#050505",
-          primaryColor: "#111111",
-          primaryTextColor: "#fafafa",
-          primaryBorderColor: "#555555",
-          lineColor: "#8a8a8a",
-          secondaryColor: "#161616",
-          tertiaryColor: "#111111",
-          fontFamily: "JetBrains Mono, monospace",
-          fontSize: "13px",
-        },
-      });
-      return m.default;
-    });
+    mermaidReady = import("mermaid").then((m) => m.default);
   }
   return mermaidReady;
+}
+
+/** (Re)apply the mono theme with a fontSize tied to the fluid root — SVG text
+ *  is baked in px at render time and would otherwise stay frozen at 13px while
+ *  the rest of the UI scales. initialize() is a cheap config merge, so running
+ *  it before each render keeps diagrams in step after window resizes too. */
+function initMermaid(mermaid: Awaited<ReturnType<typeof loadMermaid>>) {
+  const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: "base",
+    themeVariables: {
+      darkMode: true,
+      background: "#050505",
+      primaryColor: "#111111",
+      primaryTextColor: "#fafafa",
+      primaryBorderColor: "#555555",
+      lineColor: "#8a8a8a",
+      secondaryColor: "#161616",
+      tertiaryColor: "#111111",
+      fontFamily: "JetBrains Mono, monospace",
+      fontSize: `${Math.round(0.8125 * rootPx)}px`, // 13px at the 16px root
+    },
+  });
 }
 
 let uid = 0;
@@ -48,7 +53,10 @@ export default function DiagramPanel({ source }: { source: string }) {
   useEffect(() => {
     let cancelled = false;
     loadMermaid()
-      .then((mermaid) => mermaid.render(`vault-diagram-${uid++}`, monochromize(source)))
+      .then((mermaid) => {
+        initMermaid(mermaid);
+        return mermaid.render(`vault-diagram-${uid++}`, monochromize(source));
+      })
       .then(({ svg }) => {
         if (!cancelled && ref.current) ref.current.innerHTML = svg;
       })

@@ -56,7 +56,7 @@ export default function PatternDetail() {
           {p.signals.map((s) => (
             <span
               key={s}
-              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-mini text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
             >
               {s}
             </span>

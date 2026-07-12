@@ -7,8 +7,8 @@ function Tile({ label, value, hint }: { label: string; value: string | number; h
   return (
     <div className="flex-1 basis-36 rounded-xl border border-border bg-card p-4 text-center">
       <div className="font-mono text-2xl font-bold">{value}</div>
-      <div className="text-[0.6875rem] uppercase tracking-widest text-faint">{label}</div>
-      {hint && <div className="text-[0.625rem] text-faint opacity-70">{hint}</div>}
+      <div className="text-mini uppercase tracking-widest text-faint">{label}</div>
+      {hint && <div className="text-2xs text-faint opacity-70">{hint}</div>}
     </div>
   );
 }
@@ -117,7 +117,7 @@ export default function Dashboard() {
             {rows.map(({ p, s }) => (
               <div key={p.slug} className="flex items-center gap-3">
                 <Link
-                  className="w-[clamp(7rem,28vw,12rem)] truncate text-[0.8125rem] text-muted-foreground hover:text-foreground"
+                  className="w-[clamp(7rem,28vw,12rem)] truncate text-caption text-muted-foreground hover:text-foreground"
                   to={`/patterns/${p.slug}`}
                   viewTransition
                 >

@@ -73,7 +73,7 @@ export default function Home() {
           ].map(([v, label]) => (
             <div key={label} className="flex-1 px-3">
               <div className="font-mono text-xl font-bold">{v}</div>
-              <div className="text-[0.6875rem] uppercase tracking-widest text-faint">{label}</div>
+              <div className="text-mini uppercase tracking-widest text-faint">{label}</div>
             </div>
           ))}
         </div>

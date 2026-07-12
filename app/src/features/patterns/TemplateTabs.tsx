@@ -12,7 +12,7 @@ export default function TemplateTabs({ templates }: { templates: TemplateSet }) 
   if (available.length === 0) return null;
 
   const codeBlock = (code: string) => (
-    <pre className="overflow-x-auto rounded-lg border border-border bg-card p-4 font-mono text-[0.8125rem] leading-relaxed">
+    <pre className="overflow-x-auto rounded-lg border border-border bg-card p-4 font-mono text-caption leading-relaxed">
       {code}
     </pre>
   );

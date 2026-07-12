@@ -66,7 +66,7 @@ export default function App() {
                 to={l.to}
                 viewTransition
                 className={({ isActive }) =>
-                  `relative shrink-0 py-0.5 text-[0.875rem] transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
+                  `relative shrink-0 py-0.5 text-sm transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
                     isActive
                       ? "text-foreground after:right-0"
                       : "text-muted-foreground after:right-full hover:text-foreground"
@@ -75,7 +75,7 @@ export default function App() {
               >
                 {l.label}
                 {l.to === "/review" && due > 0 && (
-                  <span className="ml-1.5 inline-block min-w-[1.2rem] rounded-full bg-primary px-1 text-center font-mono text-[0.625rem] font-bold leading-[1.5] text-primary-foreground">
+                  <span className="ml-1.5 inline-block min-w-[1.2rem] rounded-full bg-primary px-1 text-center font-mono text-2xs font-bold leading-[1.5] text-primary-foreground">
                     {due}
                   </span>
                 )}

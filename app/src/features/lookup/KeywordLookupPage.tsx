@@ -103,9 +103,9 @@ export default function KeywordLookupPage() {
         <TableBody>
           {filtered.map((r) => (
             <TableRow key={r.phrase}>
-              <TableCell className="whitespace-normal text-[0.8125rem]">{r.phrase}</TableCell>
+              <TableCell className="whitespace-normal text-caption">{r.phrase}</TableCell>
               <TableCell>
-                <Link className="link-draw text-[0.8125rem]" to={`/patterns/${r.slug}`} viewTransition>
+                <Link className="link-draw text-caption" to={`/patterns/${r.slug}`} viewTransition>
                   {r.pattern}
                 </Link>
               </TableCell>

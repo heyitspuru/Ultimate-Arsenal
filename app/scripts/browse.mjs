@@ -13,13 +13,16 @@ route = "/" + route.replace(/^\/+/, "");
 const reveal = flags.includes("--reveal");
 
 const mobile = flags.includes("--mobile");
+const wide = flags.includes("--wide"); // exercises the scaled region of the root clamp (19-22px)
 
 const browser = await puppeteer.launch({ executablePath: EDGE, headless: true });
 const page = await browser.newPage();
 await page.setViewport(
   mobile
     ? { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }
-    : { width: 1280, height: 900 },
+    : wide
+      ? { width: 2560, height: 1100 }
+      : { width: 1280, height: 900 },
 );
 
 const logs = [];

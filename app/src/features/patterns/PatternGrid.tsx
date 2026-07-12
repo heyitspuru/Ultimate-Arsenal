@@ -21,7 +21,7 @@ export default function PatternGrid() {
                 viewTransition
                 className="group relative block rounded-lg border border-border bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/60"
               >
-                <span className="absolute right-3 top-3 font-mono text-[0.6875rem] text-faint transition-colors group-hover:text-foreground">
+                <span className="absolute right-3 top-3 font-mono text-mini text-faint transition-colors group-hover:text-foreground">
                   {String(p.number).padStart(2, "0")}
                 </span>
                 <span className="block pr-8 font-medium tracking-tight group-hover:underline group-hover:underline-offset-4">

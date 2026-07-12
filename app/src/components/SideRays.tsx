@@ -216,7 +216,14 @@ void main() {
         }
       };
 
-      window.addEventListener('resize', updateSize);
+      // debounced: raw resize fires 100+ times per window drag, and each
+      // updateSize() rebuilds the WebGL framebuffer
+      let resizeTimer: number | undefined;
+      const onResize = () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(updateSize, 120);
+      };
+      window.addEventListener('resize', onResize);
       updateSize();
       animationIdRef.current = requestAnimationFrame(loop);
 
@@ -225,7 +232,8 @@ void main() {
           cancelAnimationFrame(animationIdRef.current);
           animationIdRef.current = null;
         }
-        window.removeEventListener('resize', updateSize);
+        window.clearTimeout(resizeTimer);
+        window.removeEventListener('resize', onResize);
         if (renderer) {
           try {
             const loseCtx = renderer.gl.getExtension('WEBGL_lose_context');

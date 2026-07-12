@@ -334,7 +334,14 @@ void main() {
         }
       };
 
-      window.addEventListener('resize', updatePlacement);
+      // debounced: raw resize fires 100+ times per window drag, and each
+      // updatePlacement() rebuilds the WebGL framebuffer + ray geometry
+      let resizeTimer: number | undefined;
+      const onResize = () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(updatePlacement, 120);
+      };
+      window.addEventListener('resize', onResize);
       updatePlacement();
       animationIdRef.current = requestAnimationFrame(loop);
 
@@ -344,7 +351,8 @@ void main() {
           animationIdRef.current = null;
         }
 
-        window.removeEventListener('resize', updatePlacement);
+        window.clearTimeout(resizeTimer);
+        window.removeEventListener('resize', onResize);
 
         if (renderer) {
           try {
