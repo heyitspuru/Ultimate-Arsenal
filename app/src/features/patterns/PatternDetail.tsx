@@ -42,8 +42,10 @@ export default function PatternDetail() {
       </h1>
 
       {/* Everything below is the recall payload — gated so you retrieve first.
-          (Signal chips are NOT pre-shown: picking the true signal IS the gate.) */}
-      <SignalGate pattern={p}>
+          (Signal chips are NOT pre-shown: picking the true signal IS the gate.)
+          key: full state reset when navigating between patterns — the gate
+          must re-arm on every page, never leak "open" across slugs. */}
+      <SignalGate key={p.slug} pattern={p}>
         <h2>Signal keywords</h2>
         <div>
           {p.signals.map((s) => (
