@@ -56,29 +56,42 @@ interface Mutation {
   replace: string;
 }
 
-/** Classic single-token bugs. Ordered pairs — longer operators first so
- *  `<=` matches before `<`. Each must change behavior on these templates. */
+/**
+ * Classic single-token bugs. Comparison, logic, and bare-shift operators are
+ * matched **space-delimited** — these templates always write comparisons with
+ * spaces (`lo < hi`, `sum >= target`), while Java generics (`Map<Integer>`,
+ * `PriorityQueue<>`) and compound operators (`>>=`) never have surrounding
+ * spaces. That single constraint keeps a mutation from ever corrupting a type
+ * parameter or a shift-assign and mislabeling it as a comparison bug.
+ * Compound `>>=`/`<<=` are handled explicitly (unambiguously shifts).
+ */
 const MUTATIONS: Mutation[] = [
-  { category: "off-by-one comparison", find: /<=/, replace: "<" },
-  { category: "off-by-one comparison", find: />=/, replace: ">" },
-  { category: "off-by-one comparison", find: /(?<![<>=!<])<(?![<=])/, replace: "<=" },
-  { category: "off-by-one comparison", find: /(?<![<>=\-])>(?![>=])/, replace: ">=" },
+  // comparison — spaced, so `<Integer>` / `>>=` are never touched
+  { category: "off-by-one comparison", find: / <= /, replace: " < " },
+  { category: "off-by-one comparison", find: / >= /, replace: " > " },
+  { category: "off-by-one comparison", find: / < /, replace: " <= " },
+  { category: "off-by-one comparison", find: / > /, replace: " >= " },
+  // direction — increment/decrement/compound-assign never collide with generics
   { category: "reversed direction", find: /\+\+/, replace: "--" },
   { category: "reversed direction", find: /--/, replace: "++" },
   { category: "reversed direction", find: /\+=/, replace: "-=" },
   { category: "reversed direction", find: /-=/, replace: "+=" },
+  // wrong extreme (Java uses Math.max/min; covers the common case without dupes)
   { category: "wrong extreme", find: /Math\.max/, replace: "Math.min" },
   { category: "wrong extreme", find: /Math\.min/, replace: "Math.max" },
-  { category: "wrong extreme", find: /\bmax\(/, replace: "min(" },
-  { category: "wrong extreme", find: /\bmin\(/, replace: "max(" },
-  { category: "inverted logic", find: /&&/, replace: "||" },
-  { category: "inverted logic", find: /\|\|/, replace: "&&" },
-  { category: "inverted logic", find: /==/, replace: "!=" },
-  { category: "inverted logic", find: /!=/, replace: "==" },
-  { category: "wrong shift", find: /<</, replace: ">>" },
-  { category: "wrong shift", find: />>(?!>)/, replace: "<<" },
-  { category: "off-by-one", find: /\+ 1\b/, replace: "- 1" },
-  { category: "off-by-one", find: /- 1\b/, replace: "+ 1" },
+  // inverted logic — spaced
+  { category: "inverted logic", find: / && /, replace: " || " },
+  { category: "inverted logic", find: / \|\| /, replace: " && " },
+  { category: "inverted logic", find: / == /, replace: " != " },
+  { category: "inverted logic", find: / != /, replace: " == " },
+  // shift — explicit compound-assign, plus spaced bare shift
+  { category: "wrong shift", find: />>=/, replace: "<<=" },
+  { category: "wrong shift", find: /<<=/, replace: ">>=" },
+  { category: "wrong shift", find: / >> /, replace: " << " },
+  { category: "wrong shift", find: / << /, replace: " >> " },
+  // off-by-one literal — spaced, word-bounded
+  { category: "off-by-one", find: / \+ 1\b/, replace: " - 1" },
+  { category: "off-by-one", find: / - 1\b/, replace: " + 1" },
 ];
 
 export interface DebugRound {
@@ -89,25 +102,31 @@ export interface DebugRound {
 }
 
 /**
- * Sabotage one line with one classic bug. Collect every applicable
- * (line, mutation) site, pick one at random. Comments are left intact — the
- * code contradicting its own comment is the tell, like a real code review.
+ * Sabotage one line with one classic bug. Comments are left intact — the code
+ * contradicting its own comment is the tell, like a real code review.
+ *
+ * Selection is **line-uniform**: pick a random mutable line, then a random
+ * applicable mutation on it. (Picking uniformly over (line, mutation) pairs
+ * would over-select operator-dense lines.) If a chosen mutation somehow
+ * produces no change, fall through to another mutation/line rather than bail.
  */
 export function makeDebugRound(java: string): DebugRound | null {
   const lines = splitLines(java);
-  const sites: { idx: number; m: Mutation }[] = [];
-  for (const idx of substantiveIndices(lines)) {
-    for (const m of MUTATIONS) {
-      if (m.find.test(lines[idx].code)) sites.push({ idx, m });
+  const siteLines = substantiveIndices(lines).filter((idx) =>
+    MUTATIONS.some((m) => m.find.test(lines[idx].code)),
+  );
+  for (const idx of sample(siteLines, siteLines.length)) {
+    const original = lines[idx].code;
+    const applicable = MUTATIONS.filter((m) => m.find.test(original));
+    for (const m of sample(applicable, applicable.length)) {
+      const mutated = original.replace(m.find, m.replace);
+      if (mutated !== original) {
+        const out = lines.map((l, i) => (i === idx ? { ...l, code: mutated } : l));
+        return { lines: out, bugIndex: idx, originalCode: original, category: m.category };
+      }
     }
   }
-  if (sites.length === 0) return null;
-  const { idx, m } = sites[Math.floor(Math.random() * sites.length)];
-  const original = lines[idx].code;
-  const mutated = original.replace(m.find, m.replace);
-  if (mutated === original) return null;
-  const out = lines.map((l, i) => (i === idx ? { ...l, code: mutated } : l));
-  return { lines: out, bugIndex: idx, originalCode: original, category: m.category };
+  return null;
 }
 
 /** Whitespace-insensitive comparison — retrieval check, not a typing test. */
