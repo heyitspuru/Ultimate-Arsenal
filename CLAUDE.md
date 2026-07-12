@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A pattern-first DSA recall system. The hard product rule (from BUILD_PLAN.md): every surface must force **retrieval** — keyword → pattern → template — never read like a textbook. Judge UI changes against that bar, not just "does it render."
+A pattern-first DSA recall system. The hard product rule: every surface must force **retrieval** — keyword → pattern → template — never read like a textbook. Judge UI changes against that bar, not just "does it render."
 
 ## Commands
 
