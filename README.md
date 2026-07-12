@@ -69,8 +69,8 @@ content/*.md ──► app/        React recall app (this site)
 
 Add a pattern by copying [`content/_TEMPLATE.md`](content/_TEMPLATE.md) — the 8-section format is enforced (≤1 screen, Java ≤25 lines, exactly 5 problems, mnemonic ≤8 words). The app, Anki deck, and PDF pick it up on rebuild.
 
-If you Found this project and repo useful in your DSA prep and revesions, Pls Do give it a star:)
 ---
+### If you Found this project and repo useful in your DSA prep and revesions, Pls Do give it a star:)
 
 <div align="center">
 <sub>Patterns cross-checked against the community 94-sub-pattern sheet — <a href="content/masters/pattern-map.md">coverage map</a>.</sub>
