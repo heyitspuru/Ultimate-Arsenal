@@ -28,14 +28,14 @@ export default function App() {
     <>
       {/* quiet monochrome rays behind inner pages; the home hero has its own */}
       {!isHome && (
-        <div className="pointer-events-none fixed inset-0 z-0 opacity-25">
+        <div className="pointer-events-none fixed inset-0 z-0 opacity-45">
           <SideRays
             rayColor1="#ffffff"
-            rayColor2="#9a9a9a"
+            rayColor2="#b0b0b0"
             saturation={0}
-            intensity={1.1}
+            intensity={1.8}
             speed={1.2}
-            spread={2.4}
+            spread={2.8}
             origin="top-right"
             className="h-full w-full"
           />

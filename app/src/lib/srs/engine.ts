@@ -76,24 +76,64 @@ function bumpNewToday(): void {
   save("srs-new-log", { date: todayKey(), count: newIntroducedToday() + 1 });
 }
 
+/** Deterministic day-seeded RNG so a day's new-card pick is stable across reloads. */
+function dayRng(): () => number {
+  let seed = 0;
+  for (const ch of todayKey()) seed = (seed * 31 + ch.charCodeAt(0)) | 0;
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 /** Due cards (scheduled, due <= now) sorted oldest-due first, then new cards
- *  up to today's remaining allowance — same shape as an Anki session. */
+ *  up to today's remaining allowance. New cards are drawn round-robin across
+ *  patterns (shuffled per day) — never a block from one pattern, otherwise a
+ *  whole day's answers share one pattern and recall degrades to guessing. */
 export function buildQueue(now = new Date()): QueueItem[] {
   const states = loadStates();
   const due: QueueItem[] = [];
-  const fresh: QueueItem[] = [];
   const newAllowance = Math.max(0, NEW_PER_DAY - newIntroducedToday());
 
+  const unseenByPattern = new Map<string, typeof DECK>();
   for (const card of DECK) {
     const stored = states[card.id];
     if (stored) {
       const state = reviveCard(stored);
       if (state.due <= now) due.push({ card, state, isNew: false });
-    } else if (fresh.length < newAllowance) {
-      fresh.push({ card, state: createEmptyCard(now), isNew: true });
+    } else {
+      const list = unseenByPattern.get(card.patternSlug) ?? [];
+      list.push(card);
+      unseenByPattern.set(card.patternSlug, list);
     }
   }
   due.sort((a, b) => a.state.due.getTime() - b.state.due.getTime());
+
+  // day-shuffled pattern order, then take one card per pattern per lap
+  const rng = dayRng();
+  const slugs = [...unseenByPattern.keys()];
+  for (let i = slugs.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [slugs[i], slugs[j]] = [slugs[j], slugs[i]];
+  }
+  const fresh: QueueItem[] = [];
+  let lap = 0;
+  while (fresh.length < newAllowance) {
+    let took = false;
+    for (const slug of slugs) {
+      if (fresh.length >= newAllowance) break;
+      const card = unseenByPattern.get(slug)?.[lap];
+      if (card) {
+        fresh.push({ card, state: createEmptyCard(now), isNew: true });
+        took = true;
+      }
+    }
+    if (!took) break; // every pattern exhausted
+    lap++;
+  }
   return [...due, ...fresh];
 }
 
