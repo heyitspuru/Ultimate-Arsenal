@@ -81,7 +81,10 @@ export default function PatternGuessWidget({
       </div>
 
       {answered && (
-        <div style={{ marginTop: "1rem" }}>
+        <div
+          className={picked === active.correct.slug ? "feedback-right" : "feedback-wrong"}
+          style={{ marginTop: "1rem" }}
+        >
           <p style={{ margin: "0.2rem 0" }}>
             {picked === active.correct.slug ? (
               <strong style={{ color: "var(--green)" }}>Correct.</strong>

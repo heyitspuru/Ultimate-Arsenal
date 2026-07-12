@@ -1,4 +1,6 @@
-import { NavLink, Outlet, ScrollRestoration } from "react-router-dom";
+import { useMemo } from "react";
+import { NavLink, Outlet, ScrollRestoration, useLocation } from "react-router-dom";
+import { countsToday } from "./lib/srs/engine";
 
 const LINKS = [
   { to: "/review", label: "Review" },
@@ -12,6 +14,14 @@ const LINKS = [
 ];
 
 export default function App() {
+  const location = useLocation();
+  // refresh the due badge whenever the route changes (cheap: one localStorage read)
+  const due = useMemo(() => {
+    const c = countsToday();
+    return c.due + c.fresh;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
   return (
     <>
       <header className="topbar">
@@ -22,6 +32,7 @@ export default function App() {
           {LINKS.map((l) => (
             <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? "active" : "")}>
               {l.label}
+              {l.to === "/review" && due > 0 && <span className="nav-badge">{due}</span>}
             </NavLink>
           ))}
         </nav>

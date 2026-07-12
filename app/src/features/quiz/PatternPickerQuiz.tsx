@@ -58,9 +58,12 @@ export default function PatternPickerQuiz() {
         </div>
       ) : (
         <>
-          <p className="small faint" style={{ fontFamily: "var(--mono)" }}>
+          <p className="small faint" style={{ fontFamily: "var(--mono)", marginBottom: 0 }}>
             question {n} / {ROUND} &middot; score {score}
           </p>
+          <div className="progress">
+            <div style={{ width: `${((n - 1) / ROUND) * 100}%` }} />
+          </div>
           <PatternGuessWidget
             question={question}
             onAnswered={(ok) => ok && setScore((s) => s + 1)}

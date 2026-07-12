@@ -44,7 +44,10 @@ export default function SignalGate({ pattern, children }: { pattern: Pattern; ch
         })}
       </div>
       {answered ? (
-        <div style={{ marginTop: "1rem" }}>
+        <div
+          className={picked === q.correct ? "feedback-right" : "feedback-wrong"}
+          style={{ marginTop: "1rem" }}
+        >
           <p style={{ margin: "0.3rem 0" }}>
             {picked === q.correct ? (
               <strong style={{ color: "var(--green)" }}>Correct.</strong>
