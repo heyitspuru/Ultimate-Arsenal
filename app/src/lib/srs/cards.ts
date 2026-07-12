@@ -30,7 +30,7 @@ export interface ClozeLine {
 
 /** Index of a `//` line comment, or -1 — ignoring `//` inside string/char
  *  literals. Direct port of build_deck.py's _comment_index. */
-function commentIndex(line: string): number {
+export function commentIndex(line: string): number {
   let inStr: string | null = null;
   let i = 0;
   while (i < line.length - 1) {
