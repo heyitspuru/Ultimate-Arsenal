@@ -43,11 +43,11 @@ export default function App() {
       )}
 
       <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-2.5 sm:gap-6 sm:px-5">
+        <div className="wrap flex items-center gap-4 py-2.5 sm:gap-6">
           <NavLink
             to="/"
             viewTransition
-            className="group flex shrink-0 items-center gap-2.5 font-mono text-sm font-bold tracking-tight whitespace-nowrap sm:text-[15px]"
+            className="group flex shrink-0 items-center gap-2.5 font-mono text-sm font-bold tracking-tight whitespace-nowrap sm:text-[0.9375rem]"
           >
             <img
               src="/logo.png"
@@ -59,14 +59,14 @@ export default function App() {
             </span>
           </NavLink>
           {/* single-row nav: scrolls horizontally on narrow screens instead of wrapping */}
-          <nav className="no-scrollbar -my-1 flex flex-nowrap items-center gap-x-5 overflow-x-auto py-1">
+          <nav className="no-scrollbar -my-1 flex min-w-0 flex-nowrap items-center gap-x-5 overflow-x-auto py-1">
             {LINKS.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 viewTransition
                 className={({ isActive }) =>
-                  `relative shrink-0 py-0.5 text-[14px] transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
+                  `relative shrink-0 py-0.5 text-[0.875rem] transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
                     isActive
                       ? "text-foreground after:right-0"
                       : "text-muted-foreground after:right-full hover:text-foreground"
@@ -75,7 +75,7 @@ export default function App() {
               >
                 {l.label}
                 {l.to === "/review" && due > 0 && (
-                  <span className="ml-1.5 inline-block min-w-[1.2rem] rounded-full bg-primary px-1 text-center font-mono text-[10px] font-bold leading-[1.5] text-primary-foreground">
+                  <span className="ml-1.5 inline-block min-w-[1.2rem] rounded-full bg-primary px-1 text-center font-mono text-[0.625rem] font-bold leading-[1.5] text-primary-foreground">
                     {due}
                   </span>
                 )}
@@ -85,7 +85,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-16">
+      <main className="wrap relative z-10 pb-16">
         <Outlet />
       </main>
       <ScrollRestoration />

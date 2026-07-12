@@ -106,7 +106,7 @@ function FillDrill({ pattern, onNext, onReroll }: { pattern: Pattern; onNext: ()
         Type each missing line (whitespace doesn&rsquo;t matter). Different lines every round.
       </p>
 
-      <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-5 font-mono text-[13px] leading-loose">
+      <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-5 font-mono text-[0.8125rem] leading-loose">
         {lines.map((l, i) => {
           if (!l.blank) {
             return (
@@ -136,7 +136,7 @@ function FillDrill({ pattern, onNext, onReroll }: { pattern: Pattern; onNext: ()
                   }}
                   spellCheck={false}
                   placeholder="…"
-                  className={`w-full max-w-md rounded border bg-background px-2 py-0.5 font-mono text-[13px] outline-none transition-colors ${
+                  className={`w-full max-w-md rounded border bg-background px-2 py-0.5 font-mono text-[0.8125rem] outline-none transition-colors ${
                     checked
                       ? ok
                         ? "border-foreground"
@@ -220,7 +220,7 @@ function DebugDrill({ pattern, onNext, onReroll }: { pattern: Pattern; onNext: (
         {found && <>, then restore it</>}.
       </p>
 
-      <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-5 font-mono text-[13px] leading-loose">
+      <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-card p-5 font-mono text-[0.8125rem] leading-loose">
         {round.lines.map((l, i) => {
           const indent = l.code.match(/^\s*/)?.[0] ?? "";
           if ((found || shown) && i === round.bugIndex) {
@@ -238,7 +238,7 @@ function DebugDrill({ pattern, onNext, onReroll }: { pattern: Pattern; onNext: (
                     }}
                     spellCheck={false}
                     autoFocus
-                    className={`w-full max-w-md rounded border bg-background px-2 py-0.5 font-mono text-[13px] outline-none transition-colors ${
+                    className={`w-full max-w-md rounded border bg-background px-2 py-0.5 font-mono text-[0.8125rem] outline-none transition-colors ${
                       checked
                         ? fixOk
                           ? "border-foreground"

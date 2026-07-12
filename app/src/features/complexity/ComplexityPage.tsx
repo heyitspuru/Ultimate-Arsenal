@@ -73,7 +73,7 @@ export default function ComplexityPage() {
         <TableBody>
           {perPattern.map((r) => (
             <TableRow key={`${r.pattern}-${round}`}>
-              <TableCell className="text-[13px]">{r.pattern}</TableCell>
+              <TableCell className="text-[0.8125rem]">{r.pattern}</TableCell>
               <QuizCell value={r.time} quiz={quiz} />
               <QuizCell value={r.space} quiz={quiz} />
             </TableRow>
@@ -96,7 +96,7 @@ export default function ComplexityPage() {
           <TableBody>
             {COMPLEXITY.dsOps.map((r) => (
               <TableRow key={r.structure}>
-                <TableCell className="text-[13px]">{r.structure}</TableCell>
+                <TableCell className="text-[0.8125rem]">{r.structure}</TableCell>
                 <TableCell className="font-mono text-xs">{r.access}</TableCell>
                 <TableCell className="font-mono text-xs">{r.search}</TableCell>
                 <TableCell className="font-mono text-xs">{r.insert}</TableCell>
@@ -122,7 +122,7 @@ export default function ComplexityPage() {
             <TableRow key={r.bigO}>
               <TableCell className="font-mono text-xs">{r.bigO}</TableCell>
               <TableCell className="font-mono text-xs">{r.ops}</TableCell>
-              <TableCell className="text-[13px]">{r.feels}</TableCell>
+              <TableCell className="text-[0.8125rem]">{r.feels}</TableCell>
             </TableRow>
           ))}
         </TableBody>

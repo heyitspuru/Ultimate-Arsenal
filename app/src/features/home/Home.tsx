@@ -11,7 +11,7 @@ export default function Home() {
   const dueTotal = counts.due + counts.fresh;
 
   return (
-    <div className="relative -mx-5 overflow-hidden">
+    <div className="relative mx-[calc(50%-50vw)] overflow-hidden">
       {/* white volumetric rays — the single statement piece */}
       <div className="pointer-events-none absolute inset-0">
         <LightRays
@@ -73,7 +73,7 @@ export default function Home() {
           ].map(([v, label]) => (
             <div key={label} className="flex-1 px-3">
               <div className="font-mono text-xl font-bold">{v}</div>
-              <div className="text-[11px] uppercase tracking-widest text-faint">{label}</div>
+              <div className="text-[0.6875rem] uppercase tracking-widest text-faint">{label}</div>
             </div>
           ))}
         </div>

@@ -56,14 +56,14 @@ export default function PatternDetail() {
           {p.signals.map((s) => (
             <span
               key={s}
-              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
             >
               {s}
             </span>
           ))}
         </div>
 
-        <blockquote className="mt-4 border-l-2 border-foreground pl-4 text-[15px]">
+        <blockquote className="mt-4 border-l-2 border-foreground pl-4 text-[0.9375rem]">
           Mnemonic: <strong>{p.mnemonic}</strong>
         </blockquote>
 

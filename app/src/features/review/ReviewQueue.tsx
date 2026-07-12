@@ -7,7 +7,7 @@ import { buildQueue, previewIntervals, rate, Rating, type QueueItem } from "../.
 
 function ClozeFront({ card, revealed }: { card: ReviewCard; revealed: boolean }) {
   return (
-    <pre className="overflow-x-auto rounded-lg border border-border bg-background p-4 text-left font-mono text-[13px] leading-relaxed">
+    <pre className="overflow-x-auto rounded-lg border border-border bg-background p-4 text-left font-mono text-[0.8125rem] leading-relaxed">
       {card.clozeLines?.map((l, i) => {
         if (!l.blank || revealed) {
           return (
@@ -152,18 +152,18 @@ export default function ReviewQueue() {
                 <Button
                   key={r.label}
                   variant={i === 0 ? "outline" : i === 2 ? "default" : "secondary"}
-                  className="h-auto min-w-[104px] flex-col gap-0 py-1.5"
+                  className="h-auto min-w-[6.5rem] flex-col gap-0 py-1.5"
                   onClick={() => grade(r.grade)}
                 >
                   <span>{r.label}</span>
-                  <span className="font-mono text-[10px] opacity-60">
+                  <span className="font-mono text-[0.625rem] opacity-60">
                     {r.meaning}
                     {intervals && ` · ${intervals[r.grade]}`}
                   </span>
                 </Button>
               ))}
             </div>
-            <p className="mt-2 text-[11px] text-faint">
+            <p className="mt-2 text-[0.6875rem] text-faint">
               &ldquo;Again&rdquo; cards come back later in this session.
             </p>
           </div>
