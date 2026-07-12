@@ -39,6 +39,7 @@
   --font-mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
 
   --radius: 0.6rem;
+  --breakpoint-xs: 26rem;
 
   --animate-rise: rise 0.35s ease both;
   --animate-shake: shake 0.4s ease both;
@@ -73,7 +74,7 @@
     background: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
   }
@@ -123,6 +124,10 @@
   .cursor-blink::after {
     content: "▌"; margin-left: 3px; animation: var(--animate-blink);
   }
+
+  /* horizontal-scroll rows (mobile nav) without a visible scrollbar */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 }
 
 /* ---- page transitions (react-router viewTransition) ---- */

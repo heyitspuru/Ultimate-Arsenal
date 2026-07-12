@@ -43,22 +43,30 @@ export default function App() {
       )}
 
       <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center gap-6 px-5 py-3">
+        <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-2.5 sm:gap-6 sm:px-5">
           <NavLink
             to="/"
             viewTransition
-            className="font-mono text-sm font-bold tracking-tight whitespace-nowrap"
+            className="group flex shrink-0 items-center gap-2.5 font-mono text-sm font-bold tracking-tight whitespace-nowrap sm:text-[15px]"
           >
-            DSA<span className="text-muted-foreground">//</span>VAULT
+            <img
+              src="/logo.png"
+              alt="DSA Pattern Vault"
+              className="size-8 transition-transform duration-300 group-hover:rotate-[30deg] sm:size-9"
+            />
+            <span className="hidden xs:inline">
+              DSA<span className="text-muted-foreground">//</span>VAULT
+            </span>
           </NavLink>
-          <nav className="flex flex-wrap gap-x-5 gap-y-1">
+          {/* single-row nav: scrolls horizontally on narrow screens instead of wrapping */}
+          <nav className="no-scrollbar -my-1 flex flex-nowrap items-center gap-x-5 overflow-x-auto py-1">
             {LINKS.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 viewTransition
                 className={({ isActive }) =>
-                  `relative py-0.5 text-[13px] transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
+                  `relative shrink-0 py-0.5 text-[14px] transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-200 ${
                     isActive
                       ? "text-foreground after:right-0"
                       : "text-muted-foreground after:right-full hover:text-foreground"

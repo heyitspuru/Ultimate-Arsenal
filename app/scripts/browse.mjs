@@ -12,9 +12,15 @@ let [route = "", shot = "shot.png", ...flags] = process.argv.slice(2);
 route = "/" + route.replace(/^\/+/, "");
 const reveal = flags.includes("--reveal");
 
+const mobile = flags.includes("--mobile");
+
 const browser = await puppeteer.launch({ executablePath: EDGE, headless: true });
 const page = await browser.newPage();
-await page.setViewport({ width: 1280, height: 900 });
+await page.setViewport(
+  mobile
+    ? { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }
+    : { width: 1280, height: 900 },
+);
 
 const logs = [];
 page.on("console", (m) => logs.push(`[${m.type()}] ${m.text()}`));
