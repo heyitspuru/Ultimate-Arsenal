@@ -10,8 +10,18 @@ import {
 import { load, save, todayKey } from "../storage";
 import { DECK, type ReviewCard } from "./cards";
 
-/** Retention target mirrors the repo's Anki guidance: FSRS, 88%, 10 new/day. */
-const F = fsrs(generatorParameters({ enable_fuzz: true, request_retention: 0.88 }));
+/** Retention target mirrors the repo's Anki guidance: FSRS, 88%, 10 new/day.
+ *  No learning/relearning steps: sub-day steps made "Good" cards reappear the
+ *  same session, which read as repetition, not scheduling. In-session repeats
+ *  are the Review UI's job and happen only on "Again". */
+const F = fsrs(
+  generatorParameters({
+    enable_fuzz: true,
+    request_retention: 0.88,
+    learning_steps: [],
+    relearning_steps: [],
+  }),
+);
 export const NEW_PER_DAY = 10;
 
 // ---- persistence ----------------------------------------------------------

@@ -99,8 +99,8 @@ export default function ReviewQueue() {
     const next = rate(item, g);
     setQueue((old) => {
       const rest = old.slice(1);
-      // short intervals ("Again"/learning steps) come back within this session
-      if (next.due.getTime() <= Date.now() + 10 * 60 * 1000) {
+      // only forgotten cards repeat in-session; everything else waits for FSRS
+      if (g === Rating.Again) {
         return [...rest, { card: item.card, state: next, isNew: false }];
       }
       return rest;
@@ -158,7 +158,9 @@ export default function ReviewQueue() {
                   <span>{r.label}</span>
                   <span className="font-mono text-2xs opacity-60">
                     {r.meaning}
-                    {intervals && ` · ${intervals[r.grade]}`}
+                    {r.grade === Rating.Again
+                      ? " · this session"
+                      : intervals && ` · ${intervals[r.grade]}`}
                   </span>
                 </Button>
               ))}

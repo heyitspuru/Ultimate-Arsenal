@@ -1,6 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { PATTERNS } from "../../lib/content";
+import { exportAll, importAll, todayKey } from "../../lib/storage";
 import { countsToday, loadLog, patternSummaries } from "../../lib/srs/engine";
 
 function Tile({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
@@ -27,6 +29,50 @@ function Meter({ value }: { value: number }) {
 
 function dayKey(ts: number): string {
   return new Date(ts).toISOString().slice(0, 10);
+}
+
+function BackupControls() {
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function download() {
+    const url = URL.createObjectURL(new Blob([exportAll()], { type: "application/json" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `dsa-vault-backup-${todayKey()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function restore(file: File | undefined) {
+    if (!file) return;
+    try {
+      importAll(await file.text());
+      location.reload();
+    } catch {
+      alert("That file isn't a vault backup.");
+    }
+  }
+
+  return (
+    <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1">
+      <span className="text-mini text-faint">
+        Stats live in this browser — use one device for your dailies, or carry a backup:
+      </span>
+      <Button variant="outline" size="sm" onClick={download}>
+        Export backup
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => fileRef.current?.click()}>
+        Import
+      </Button>
+      <input
+        ref={fileRef}
+        type="file"
+        accept=".json,application/json"
+        className="hidden"
+        onChange={(e) => restore(e.target.files?.[0])}
+      />
+    </div>
+  );
 }
 
 export default function Dashboard() {
@@ -133,6 +179,8 @@ export default function Dashboard() {
           </div>
         </>
       )}
+
+      <BackupControls />
     </>
   );
 }
