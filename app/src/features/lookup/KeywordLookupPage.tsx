@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { KEYWORD_LOOKUP, patternBySlug } from "../../lib/content";
+import { KEYWORD_LOOKUP, PATTERNS, patternBySlug } from "../../lib/content";
 import type { KeywordRow } from "../../content/types";
 
 function randomRow(exclude?: KeywordRow): KeywordRow {
@@ -67,12 +67,33 @@ function FlashCard() {
   );
 }
 
+// Master table rows are the curated default view; per-pattern signals and
+// problem names are already-authored data the search wasn't reaching, so a
+// query like "subsequence" (in DP's problem names, not the master table)
+// used to return nothing even though the pattern covers it.
+const SEARCH_INDEX: KeywordRow[] = (() => {
+  const rows = [...KEYWORD_LOOKUP.rows];
+  const seen = new Set(rows.map((r) => r.phrase.toLowerCase()));
+  const add = (phrase: string, pattern: string, slug: string) => {
+    const key = phrase.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      rows.push({ phrase, pattern, slug });
+    }
+  };
+  for (const p of PATTERNS) {
+    for (const s of p.signals) add(s, p.name, p.slug);
+    for (const prob of p.problems) add(prob.name, p.name, p.slug);
+  }
+  return rows;
+})();
+
 export default function KeywordLookupPage() {
   const [q, setQ] = useState("");
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     if (!needle) return KEYWORD_LOOKUP.rows;
-    return KEYWORD_LOOKUP.rows.filter(
+    return SEARCH_INDEX.filter(
       (r) => r.phrase.toLowerCase().includes(needle) || r.pattern.toLowerCase().includes(needle),
     );
   }, [q]);

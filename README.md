@@ -7,7 +7,7 @@
 **Keyword → Pattern → Template.**
 Built for recall, not re-reading.
 
-[**⚡ Use it live**](https://ultimate-arsenal.vercel.app) · 35 patterns · 351 spaced-recall cards · 176 curated problems
+[**⚡ Use it live**](https://ultimate-arsenal.vercel.app) · 35 patterns · 352 spaced-recall cards · 176 curated problems
 
 ![React](https://img.shields.io/badge/React_19-0a0a0a?logo=react) ![TypeScript](https://img.shields.io/badge/TypeScript-0a0a0a?logo=typescript) ![Vite](https://img.shields.io/badge/Vite-0a0a0a?logo=vite) ![FSRS](https://img.shields.io/badge/FSRS-spaced_repetition-0a0a0a)
 
@@ -27,7 +27,7 @@ The Vault flips every surface into a recall exercise. A problem gives off *signa
 
 | Surface | The recall it forces |
 |---|---|
-| **Review** | 351 cards scheduled by FSRS — signals, template clozes, and re-solve prompts arrive right before you'd forget them |
+| **Review** | 352 cards scheduled by FSRS — signals, template clozes, and re-solve prompts arrive right before you'd forget them |
 | **Quiz** | Interleaved rounds: a random cue from any of 35 patterns, 8-way choice, instant *why* |
 | **Drill** | Type the missing template lines (they rotate), or **Fix the bug** — one line sabotaged, comments intact, find and repair it |
 | **Patterns** | 35 one-pagers behind a recall gate: pick the true signal before the page opens |
@@ -63,7 +63,7 @@ All 35 patterns live as plain markdown in [`content/patterns/`](content/patterns
 
 ```
 content/*.md ──► app/        React recall app (this site)
-             ──► anki/       build_deck.py → FSRS-ready .apkg (same 351 cards)
+             ──► anki/       build_deck.py → FSRS-ready .apkg (same 352 cards)
              ──► site/       build_pdf.py  → one printable revision pack
 ```
 

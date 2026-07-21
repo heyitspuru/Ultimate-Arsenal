@@ -9,6 +9,7 @@ signals:
   - "min or max cost / longest / shortest"
   - "can you make / reach a target"
   - "overlapping subproblems + optimal substructure"
+  - "subsequence (skip elements, order kept, not contiguous)"
 complexity:
   time: "O(states * transitions)"
   space: "O(states)"
@@ -27,7 +28,7 @@ problems:
 # Dynamic Programming
 
 ## Signal keywords
-<span class="chip">count the ways</span> <span class="chip">min / max cost</span> <span class="chip">longest / shortest</span> <span class="chip">can you reach target</span> <span class="chip">overlapping subproblems</span>
+<span class="chip">count the ways</span> <span class="chip">min / max cost</span> <span class="chip">longest / shortest</span> <span class="chip">can you reach target</span> <span class="chip">overlapping subproblems</span> <span class="chip">subsequence, not contiguous</span>
 
 ## When to use / NOT use
 

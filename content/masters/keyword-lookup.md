@@ -27,7 +27,7 @@
 | prefix search, autocomplete, dictionary, word search II    | Trie | [→](../patterns/21-trie.md) |
 | local rule gives global optimum, interval scheduling, jump/reach | Greedy | [→](../patterns/22-greedy.md) |
 | single number, count bits, power of two, bitmask subsets   | Bit Manipulation | [→](../patterns/23-bit-manipulation.md) |
-| count the ways, min/max cost, "can you make", longest X    | Dynamic Programming | [→](../patterns/24-dynamic-programming.md) |
+| count the ways, min/max cost, "can you make", longest X, **subsequence** (order kept, not contiguous) | Dynamic Programming | [→](../patterns/24-dynamic-programming.md) |
 | weighted graph, non-negative, min cost / time path | Dijkstra | [→](../patterns/25-dijkstra.md) |
 | negative edges, at most K stops, negative cycle | Bellman-Ford | [→](../patterns/26-bellman-ford.md) |
 | connect all nodes at min cost, spanning tree | Minimum Spanning Tree | [→](../patterns/27-minimum-spanning-tree.md) |
@@ -44,7 +44,7 @@
 
 When two patterns feel close:
 
-- **Contiguous** best run → Sliding Window; **any** subset/order → DP or Backtracking.
+- **Contiguous** best run → Sliding Window; **subsequence** (skip elements, order kept) → DP for the optimum, Backtracking to enumerate all of them.
 - Shortest path **unweighted** → Graph BFS; components / all-reachable → Graph DFS.
 - Need the **median** continuously → Two Heaps; need the **k best** → Heap / Top-K.
 - Grouping that only ever **merges** → Union-Find; grouping with **ordering** constraints → Topological Sort.

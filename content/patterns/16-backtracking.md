@@ -5,7 +5,7 @@ sprint: 2
 tier: Intermediate
 mnemonic: "Choose, explore, un-choose."
 signals:
-  - "generate all subsets / permutations"
+  - "generate all subsets / permutations / subsequences"
   - "combinations summing to target"
   - "N-Queens / sudoku / word search"
   - "find all valid configurations"
@@ -23,7 +23,7 @@ problems:
 # Backtracking
 
 ## Signal keywords
-<span class="chip">all subsets / permutations</span> <span class="chip">combinations to target</span> <span class="chip">generate all ways</span> <span class="chip">N-Queens / sudoku</span> <span class="chip">word search</span>
+<span class="chip">all subsets / permutations / subsequences</span> <span class="chip">combinations to target</span> <span class="chip">generate all ways</span> <span class="chip">N-Queens / sudoku</span> <span class="chip">word search</span>
 
 ## When to use / NOT use
 

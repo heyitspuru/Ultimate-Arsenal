@@ -22,7 +22,7 @@ npm run lint       # oxlint
 Offline artifacts (Python is `python`, not `python3`, on this machine):
 
 ```bash
-python anki/build_deck.py    # → anki/cards.csv + .apkg (351 cards, must mirror the app deck 1:1)
+python anki/build_deck.py    # → anki/cards.csv + .apkg (352 cards, must mirror the app deck 1:1)
 python site/build_pdf.py     # → dsa-pattern-vault.pdf (currently blocked on Windows: WeasyPrint needs the GTK runtime)
 ```
 
@@ -57,9 +57,10 @@ The contract per pattern file: YAML frontmatter (`pattern`, `slug`, `sprint`, `t
 ## App structure (Vite + React 19 + TS, static SPA, no backend)
 
 - All state is localStorage (`app/src/lib/storage.ts`, namespace `dsa-vault:v1:`). There is deliberately no server; do not add one for feature work.
-- SRS: `app/src/lib/srs/` — `cards.ts` builds the 351-card deck (keyword/cloze/problem — mirrors `build_deck.py`'s three types; keep counts identical), `engine.ts` wraps ts-fsrs (88% retention, 10 new/day, new cards drawn round-robin across patterns with a day-seeded shuffle — never a block from one pattern; learning/relearning steps are deliberately empty — in-session repeats happen only on "Again", via the ReviewQueue requeue, never from sub-day FSRS intervals).
+- SRS: `app/src/lib/srs/` — `cards.ts` builds the 352-card deck (keyword/cloze/problem — mirrors `build_deck.py`'s three types; keep counts identical), `engine.ts` wraps ts-fsrs (88% retention, 10 new/day, new cards drawn round-robin across patterns with a day-seeded shuffle — never a block from one pattern; learning/relearning steps are deliberately empty — in-session repeats happen only on "Again", via the ReviewQueue requeue, never from sub-day FSRS intervals).
 - Drills: `app/src/features/drill/drillEngine.ts` — fill-mode blanks rotate randomly; debug-mode mutations are **space-delimited operator matches only** (` < `, ` == `), which is what keeps Java generics (`Map<Integer>`) and compound ops (`>>=`) from being corrupted. Review clozes (`cards.ts clozeLines`) stay deterministic — FSRS cards need stable identity.
 - Recall gates (`SignalGate`) are session-only and keyed by slug so every page visit forces one rep; don't persist them.
+- Lookup search (`KeywordLookupPage.tsx`): the master table (`content/masters/keyword-lookup.md`, 35 curated rows) is the default view, but the search box also indexes every pattern's `signals[]` and `problems[].name` — words that are only in a problem title (e.g. "subsequence") still surface a hit. Widen matching there before adding more master-table rows.
 - Design system: pure monochrome (user's explicit choice — no hue anywhere). Feedback = inversion + ✓/✕ icons, difficulty = outlined/half/inverted intensity. Fluid scaling via one mechanism: `html { font-size: clamp(0.9375rem, 0.47vw + 0.625rem, 1.375rem) }` — everything is rem-based so it all scales together. Keep clamp endpoints in rem (px endpoints break the user's browser font-size accessibility setting). Type sizes between Tailwind steps use the `@theme` tokens `text-caption`/`text-mini`/`text-2xs` (2xs carries a `max(…, 10px)` legibility floor) — don't reintroduce arbitrary `text-[…rem]` literals.
 - Mermaid: self-hosted, dynamic-imported in `DiagramPanel.tsx`; font size derives from the computed root per render; the content's red `hot` classDef is rewritten to mono at render time (`monochromize`) — content files keep the red for the PDF.
 
